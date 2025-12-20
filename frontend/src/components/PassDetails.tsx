@@ -14,6 +14,7 @@ import HorizonCanvas from "./HorizonCanvas";
 import * as satellite from "satellite.js";
 import type { GroundStationEntity, SatelliteEntity } from "../model";
 import { useEffect, useMemo, useState } from "react";
+import SegmentProgress from "./SegmentProgress";
 
 const calculateAngle = ({
   groundStation,
@@ -72,6 +73,7 @@ const calculateAngle = ({
 
 export default function PassDetails() {
   const { id } = useParams();
+  const [isRealtime, setIsRealtime] = useState(true);
   const { data, error, isLoading } = useGetPassEventById(id!);
   const { data: comparisonData } = useComparePassEventsForCurrentOrbit(id!);
   // TODO: on error, render error message returned from API, but first define global 404 entity response in NestJs
@@ -82,12 +84,14 @@ export default function PassDetails() {
     // Update current time every second
     const interval = setInterval(() => {
       const now = new Date();
-      setCurrentTime(now);
+      if (isRealtime) {
+        setCurrentTime(now);
+      }
     }, 1000);
 
     // Cleanup interval on unmount
     return () => clearInterval(interval);
-  }, []);
+  }, [isRealtime]);
 
   // Draw current satellite position
   const satellitePosition = useMemo(() => {
@@ -141,6 +145,19 @@ export default function PassDetails() {
     return pathPoints;
   }, [data]);
 
+  // Calculate step for time slider so there are ~100 steps in the whole aos-los range
+  const sliderStep = useMemo(() => {
+    if (!data?.aos || !data?.los) return 1000;
+    const aosTime = new Date(data.aos).getTime();
+    const losTime = new Date(data.los).getTime();
+    const durationMs = losTime - aosTime;
+    const targetSteps = 100;
+    const rawStepMs = durationMs / targetSteps;
+    const minStepMs = 1000; // at most 1 second step
+    const maxStepMs = 120_000; // at most 120 seconds step
+    return Math.min(maxStepMs, Math.max(minStepMs, Math.floor(rawStepMs)));
+  }, [data]);
+
   return (
     <div className="pass-details">
       {isLoading && <p>Loading pass details...</p>}
@@ -175,6 +192,35 @@ export default function PassDetails() {
                   : []
               }
             ></HorizonCanvas>
+            <div className="pass-timing">
+              <div className="controls">
+                <div className="current-time">
+                  {currentTime.toLocaleString()}
+                </div>
+                <button onClick={() => setIsRealtime(!isRealtime)}>
+                  {isRealtime ? "Switch to Manual Time" : "Switch to Realtime"}
+                </button>
+              </div>
+              <div className="time-slider">
+                <input
+                  type="range"
+                  min={new Date(data.aos).getTime()}
+                  max={new Date(data.los).getTime()}
+                  step={sliderStep}
+                  value={currentTime.getTime()}
+                  disabled={isRealtime}
+                  onChange={(e) => {
+                    setIsRealtime(false);
+                    setCurrentTime(new Date(Number(e.target.value)));
+                  }}
+                />
+                <SegmentProgress
+                  aos={new Date(data.aos)}
+                  los={new Date(data.los)}
+                  visibleSegments={JSON.parse(data.visibleSegments)}
+                />
+              </div>
+            </div>
           </div>
           <div className="pass-comparison">
             {comparisonData && comparisonData.length > 0 ? (

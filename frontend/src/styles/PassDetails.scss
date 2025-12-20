@@ -1,52 +1,69 @@
 @import "./responsive.scss";
 
-.pass-comparison-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.pass-comparison-card {
-  background-color: #111827;
-  border: 1px solid #1f2937;
-  border-radius: 0.75rem;
-  padding: 1rem;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  &:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 10px var(--primary-color);
-  }
-  .col {
-    flex: 1;
-    &.large {
-      flex: 2;
-    }
-  }
-
-  .elevation,
-  .duration {
+.pass-details {
+  .pass-comparison-list {
     display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    .visible {
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .pass-comparison-card {
+      background-color: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
       display: flex;
-      gap: 0.25rem;
       align-items: center;
-      &.red {
-        color: #ef4444;
+      gap: 1rem;
+      &:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 10px var(--primary-color);
       }
-      &.yellow {
-        color: #f59e0b;
+      .col {
+        flex: 1;
+        &.large {
+          flex: 2;
+        }
       }
-      &.green {
-        color: #10b981;
+
+      .elevation,
+      .duration {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        .visible {
+          display: flex;
+          gap: 0.25rem;
+          align-items: center;
+          &.red {
+            color: #ef4444;
+          }
+          &.yellow {
+            color: #f59e0b;
+          }
+          &.green {
+            color: #10b981;
+          }
+        }
+        .max {
+          color: #9ca3af;
+        }
       }
     }
-    .max {
-      color: #9ca3af;
+  }
+
+  .sky {
+    margin-bottom: 1rem;
+    .pass-timing {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      .time-slider {
+        flex: 1;
+        input {
+          width: 100%;
+        }
+      }
     }
   }
 }

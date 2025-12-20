@@ -124,8 +124,7 @@ select,
 input[type="text"],
 input[type="number"],
 input[type="time"],
-button[type="submit"],
-button[type="reset"],
+button,
 select {
   padding: 0.5rem 1rem;
   background-color: var(--form-fields-background-color);
@@ -138,8 +137,7 @@ select {
     border-color: var(--primary-color);
   }
 }
-button[type="submit"],
-button[type="reset"] {
+button {
   cursor: pointer;
   &:active,
   &:hover {
