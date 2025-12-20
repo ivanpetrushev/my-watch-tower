@@ -24,7 +24,6 @@ export default function SegmentProgress({
             key={index}
             className="visible-segment"
             style={{
-              position: "absolute",
               left: `${leftPercent}%`,
               width: `${widthPercent}%`,
             }}

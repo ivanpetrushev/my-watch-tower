@@ -64,6 +64,13 @@
           width: 100%;
         }
       }
+      .controls,
+      .time-slider {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        justify-content: space-between;
+      }
     }
   }
 }
