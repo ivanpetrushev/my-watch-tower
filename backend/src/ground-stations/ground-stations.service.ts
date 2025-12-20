@@ -50,16 +50,19 @@ export class GroundStationsService {
       throw new NotFoundException('Ground station not found');
     }
 
-    // refresh passess for this ground station
+    // refresh passes for this ground station
     await this.prisma.passEvent.deleteMany({
       where: { groundStationId: id },
     });
-    await this.predictorService.addGroundStation(id);
 
-    return await this.prisma.groundStation.update({
+    const updatedStation = await this.prisma.groundStation.update({
       where: { id },
       data,
     });
+
+    await this.predictorService.addGroundStation(id);
+
+    return updatedStation;
   }
 
   async remove(id: number): Promise<GroundStation> {
