@@ -110,6 +110,38 @@ export class PredictorService implements OnModuleInit {
     );
   }
 
+  async addGroundStation(groundStationId: number) {
+    // get all tracked satellites
+    // for each satellite, calculate passes for the next 7 days
+    this.logger.log(
+      `Adding ground station ${groundStationId} to predictor queue for all tracked satellites...`,
+    );
+    const satelliteIds = await this.prisma.satellite.findMany({
+      where: { isTracked: true },
+      select: { id: true },
+    });
+    const dateStart = new Date();
+    const dateEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days ahead
+
+    const promises: Promise<Job>[] = [];
+    for (const sat of satelliteIds) {
+      // run in background Queue
+      promises.push(
+        this.predictorQueue.add('processSatelliteOverGroundStation', {
+          satelliteId: sat.id,
+          groundStationId,
+          dateStart,
+          dateEnd,
+        }),
+      );
+    }
+    const startTime = Date.now();
+    await Promise.all(promises);
+    this.logger.log(
+      `Ground station ${groundStationId} added to predictor queue for ${satelliteIds.length} satellites in ${Date.now() - startTime} ms`,
+    );
+  }
+
   @Cron('*/1 * * * *') // every minute
   async clearOldPassEvents() {
     // delete pass events where los is older than now

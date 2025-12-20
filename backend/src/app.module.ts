@@ -5,7 +5,6 @@ import { PrismaService } from './prisma/prisma.service';
 import { BootstrapService } from './bootstrap/bootstrap.service';
 import { ConfigModule } from '@nestjs/config';
 import { TleUpdateService } from './tle-update/tle-update.service';
-import { GroundStationsModule } from './ground-stations/ground-stations.module';
 import { TransmittersService } from './transmitters/transmitters.service';
 import { SatellitesController } from './satellites/satellites.controller';
 import { SatellitesService } from './satellites/satellites.service';
@@ -18,11 +17,12 @@ import { PassEventsController } from './pass-events/pass-events.controller';
 import { BullModule } from '@nestjs/bullmq';
 import { PredictorConsumer } from './predictor/predictor.processor';
 import { ScheduleModule } from '@nestjs/schedule';
+import { GroundStationsController } from './ground-stations/ground-stations.controller';
+import { GroundStationsService } from './ground-stations/ground-stations.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    GroundStationsModule,
     BullModule.forRoot({
       connection: {
         host: 'localhost',
@@ -39,6 +39,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     SatellitesController,
     TagsController,
     PassEventsController,
+    GroundStationsController,
   ],
   providers: [
     AppService,
@@ -52,6 +53,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     TagsService,
     PassEventsService,
     PredictorConsumer,
+    GroundStationsService,
   ],
 })
 export class AppModule {}

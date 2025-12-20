@@ -3,17 +3,24 @@ import { CreateGroundStationDto } from './dto/create-ground-station.dto';
 import { UpdateGroundStationDto } from './dto/update-ground-station.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GroundStation } from 'src/generated/prisma/client';
+import { PredictorService } from 'src/predictor/predictor.service';
 // import { GroundStationCreateInput } from 'src/generated/prisma/models';
 
 @Injectable()
 export class GroundStationsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private predictorService: PredictorService,
+  ) {}
 
   async create(data: CreateGroundStationDto): Promise<GroundStation> {
-    return this.prisma.groundStation.create({
+    const createdStation = await this.prisma.groundStation.create({
       data,
     });
-    // TODO: trigger bulk predictor for the new station
+
+    await this.predictorService.addGroundStation(createdStation.id);
+
+    return createdStation;
   }
 
   async findAll(): Promise<GroundStation[]> {
@@ -42,11 +49,17 @@ export class GroundStationsService {
     if (!item) {
       throw new NotFoundException('Ground station not found');
     }
+
+    // refresh passess for this ground station
+    await this.prisma.passEvent.deleteMany({
+      where: { groundStationId: id },
+    });
+    await this.predictorService.addGroundStation(id);
+
     return await this.prisma.groundStation.update({
       where: { id },
       data,
     });
-    // TODO: trigger bulk predictor for the updated station
   }
 
   async remove(id: number): Promise<GroundStation> {
@@ -56,6 +69,12 @@ export class GroundStationsService {
     if (!item) {
       throw new NotFoundException('Ground station not found');
     }
+
+    // clear passes for this ground station
+    await this.prisma.passEvent.deleteMany({
+      where: { groundStationId: id },
+    });
+
     return await this.prisma.groundStation.delete({
       where: { id },
     });
