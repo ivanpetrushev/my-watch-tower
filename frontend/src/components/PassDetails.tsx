@@ -16,6 +16,7 @@ import type { GroundStationEntity, SatelliteEntity } from "../model";
 import { useEffect, useMemo, useState } from "react";
 import SegmentProgress from "./SegmentProgress";
 import TransmitterCard from "./TransmitterCard";
+import MapFootprint from "./MapFootprint";
 
 const calculateAngle = ({
   groundStation,
@@ -48,7 +49,7 @@ const calculateAngle = ({
 
   const positionEcf = satellite.eciToEcf(positionEci, gmst),
     observerEcf = satellite.geodeticToEcf(observerGd),
-    // positionGd = satellite.eciToGeodetic(positionEci, gmst),
+    positionGd = satellite.eciToGeodetic(positionEci, gmst),
     lookAngles = satellite.ecfToLookAngles(observerGd, positionEcf);
   const dopplerFactor = satellite.dopplerFactor(
     observerEcf,
@@ -60,15 +61,18 @@ const calculateAngle = ({
     elevation = lookAngles.elevation,
     rangeSat = lookAngles.rangeSat;
 
-  if (elevation < 0) {
-    // satellite is below horizon
-    return;
-  }
+  const latitude = satellite.radiansToDegrees(positionGd.latitude),
+    longitude = satellite.radiansToDegrees(positionGd.longitude),
+    height = positionGd.height;
+
   return {
     azimuth: satellite.radiansToDegrees(azimuth),
     elevation: satellite.radiansToDegrees(elevation),
     rangeSat,
     dopplerFactor,
+    latitude,
+    longitude,
+    height,
   };
 };
 
@@ -113,7 +117,13 @@ export default function PassDetails() {
       return [];
     }
 
-    const pathPoints: Array<{ azimuth: number; elevation: number }> = [];
+    const pathPoints: Array<{
+      azimuth: number;
+      elevation: number;
+      latitude: number;
+      longitude: number;
+      height: number;
+    }> = [];
     const startTime = new Date(data.aos).getTime();
     const endTime = new Date(data.los).getTime();
     // const stepMs = 10000; // Calculate every 10 seconds
@@ -139,6 +149,9 @@ export default function PassDetails() {
         pathPoints.push({
           azimuth: result.azimuth,
           elevation: result.elevation,
+          latitude: result.latitude,
+          longitude: result.longitude,
+          height: result.height,
         });
       }
     }
@@ -179,8 +192,6 @@ export default function PassDetails() {
                 <p>Range: {Math.round(satellitePosition.rangeSat)} km</p>
               )}
             </div>
-
-            {/* TODO: satellite range, doppler shift at AOS/LOS/current time */}
           </div>
           <div className="sky">
             <HorizonCanvas
@@ -205,35 +216,41 @@ export default function PassDetails() {
                   : []
               }
             ></HorizonCanvas>
-            {/* TODO: map with satellite footprint */}
-            <div className="pass-timing">
-              <div className="controls">
-                <div className="current-time">
-                  {currentTime.toLocaleString()}
-                </div>
-                <button onClick={() => setIsRealtime(!isRealtime)}>
-                  {isRealtime ? "Switch to Manual Time" : "Switch to Realtime"}
-                </button>
-              </div>
-              <div className="time-slider">
-                <input
-                  type="range"
-                  min={new Date(data.aos).getTime()}
-                  max={new Date(data.los).getTime()}
-                  step={sliderStep}
-                  value={currentTime.getTime()}
-                  disabled={isRealtime}
-                  onChange={(e) => {
-                    setIsRealtime(false);
-                    setCurrentTime(new Date(Number(e.target.value)));
-                  }}
-                />
-                <SegmentProgress
-                  aos={new Date(data.aos)}
-                  los={new Date(data.los)}
-                  visibleSegments={JSON.parse(data.visibleSegments)}
-                />
-              </div>
+            <MapFootprint
+              groundStation={data.groundStation}
+              satelliteLatLng={{
+                latitude: satellitePosition?.latitude || 0,
+                longitude: satellitePosition?.longitude || 0,
+                height: satellitePosition?.height || 0,
+              }}
+              satellitePath={satellitePath}
+            />
+          </div>
+          <div className="pass-timing">
+            <div className="controls">
+              <div className="current-time">{currentTime.toLocaleString()}</div>
+              <button onClick={() => setIsRealtime(!isRealtime)}>
+                {isRealtime ? "Switch to Manual Time" : "Switch to Realtime"}
+              </button>
+            </div>
+            <div className="time-slider">
+              <input
+                type="range"
+                min={new Date(data.aos).getTime()}
+                max={new Date(data.los).getTime()}
+                step={sliderStep}
+                value={currentTime.getTime()}
+                disabled={isRealtime}
+                onChange={(e) => {
+                  setIsRealtime(false);
+                  setCurrentTime(new Date(Number(e.target.value)));
+                }}
+              />
+              <SegmentProgress
+                aos={new Date(data.aos)}
+                los={new Date(data.los)}
+                visibleSegments={JSON.parse(data.visibleSegments)}
+              />
             </div>
           </div>
           <div className="ground">

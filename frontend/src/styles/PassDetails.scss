@@ -76,23 +76,27 @@
 
   .sky {
     margin-bottom: 1rem;
-    .pass-timing {
-      margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .pass-timing {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    .time-slider {
+      flex: 1;
+      input {
+        width: 100%;
+      }
+    }
+    .controls,
+    .time-slider {
       display: flex;
+      flex-direction: column;
       gap: 0.5rem;
-      .time-slider {
-        flex: 1;
-        input {
-          width: 100%;
-        }
-      }
-      .controls,
-      .time-slider {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        justify-content: space-between;
-      }
+      justify-content: space-between;
     }
   }
 
