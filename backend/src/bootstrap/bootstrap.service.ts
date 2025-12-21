@@ -139,5 +139,7 @@ export class BootstrapService implements OnModuleInit {
     );
     // TODO: it is annoyng to wait at the first run. Disable it at least during development?
     // this.predictorService.bulkPredictor();
+    // this.predictorService.addGroundStation(2);
+    // this.predictorService.debug();
   }
 }

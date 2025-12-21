@@ -239,7 +239,7 @@ export class PredictorConsumer extends WorkerHost {
 
     for (const rp of fineGrainPasses) {
       // debug
-      // console.log(
+      // this.logger.debug(
       //   `Pass (orb #${rp.orbitNumber}) from ${rp.startTime.toISOString()} to ${rp.endTime.toISOString()} (max ${rp.highestElevation.toFixed(2)}°, ${rp.points.length} rough points)`,
       // );
       const obstructedSegments = this.obstructPass(
@@ -265,9 +265,11 @@ export class PredictorConsumer extends WorkerHost {
           (sum, seg) => sum + seg.duration,
           0,
         ),
-        maxVisibleElevation: Math.max(
-          ...obstructedSegments.map((seg) => seg.highestElevation),
-        ),
+        // trying to write NULL into field with no default value would just hang the query
+        maxVisibleElevation:
+          obstructedSegments.length > 0
+            ? Math.max(...obstructedSegments.map((seg) => seg.highestElevation))
+            : 0,
       };
       await this.prisma.passEvent.upsert({
         where: {

@@ -110,6 +110,17 @@ export class PredictorService implements OnModuleInit {
     );
   }
 
+  async debug() {
+    const dateStart = new Date();
+    const dateEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days ahead
+    await this.predictorQueue.add('processSatelliteOverGroundStation', {
+      satelliteId: 59588,
+      groundStationId: 2,
+      dateStart,
+      dateEnd,
+    });
+  }
+
   async addGroundStation(groundStationId: number) {
     // get all tracked satellites
     // for each satellite, calculate passes for the next 7 days
