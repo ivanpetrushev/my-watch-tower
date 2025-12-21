@@ -4,6 +4,9 @@ import "../styles/MapFootprint.scss";
 import type { GroundStationEntity } from "../model";
 import { GeodesicCircle } from "./GeodesicCircle";
 import { GeodesicLine } from "./GeodesicLine";
+import { renderToStaticMarkup } from "react-dom/server";
+import { divIcon } from "leaflet";
+import { Satellite, TowerControl } from "lucide-react";
 
 const EARTH_RADIUS_KM = 6371;
 
@@ -14,6 +17,22 @@ const calculateFootprintRadius = (heightKm: number) => {
   // Arc length = R * alpha (in radians)
   // Convert to meters for Leaflet
   return EARTH_RADIUS_KM * alpha * 1000;
+};
+
+// Helper to create a custom icon from a Lucide component
+const createCustomIcon = (IconComponent: React.ElementType, color: string) => {
+  const iconMarkup = renderToStaticMarkup(
+    <div style={{ color: color, display: "flex", justifyContent: "center" }}>
+      <IconComponent size={32} fill="currentColor" />
+    </div>
+  );
+
+  return divIcon({
+    html: iconMarkup,
+    className: "custom-marker-icon", // You might need to reset default leaflet styles in CSS
+    iconSize: [32, 32],
+    iconAnchor: [16, 32], // Center bottom anchor
+  });
 };
 
 export default function MapFootprint({
@@ -36,6 +55,10 @@ export default function MapFootprint({
 }) {
   const footprintRadius = calculateFootprintRadius(satelliteLatLng.height);
 
+  // Create icons
+  const groundStationIcon = createCustomIcon(TowerControl, "red");
+  const satelliteIcon = createCustomIcon(Satellite, "#60a5fa"); // primary color
+
   return (
     <div className="map-container">
       <MapContainer
@@ -48,9 +71,11 @@ export default function MapFootprint({
         />
         <Marker
           position={[groundStation.latitude, groundStation.longitude]}
+          icon={groundStationIcon}
         ></Marker>
         <Marker
           position={[satelliteLatLng.latitude, satelliteLatLng.longitude]}
+          icon={satelliteIcon}
         ></Marker>
         {/* This produces weird results for odd orbits like:
         - molniya (norad id 29249) */}
