@@ -1,15 +1,49 @@
-export const formatFrequency = (freq: number | null) => {
+import type { TransmitterEntity } from "../model";
+
+export const formatFrequency = (
+  freq: number | null,
+  direction: "uplink" | "downlink" | "duplex" | "unknown" = "unknown",
+  dopplerFactor?: number | undefined
+) => {
   if (freq === null) return "N/A";
-  const freqNum = Number(freq);
-  if (freqNum >= 1_000_000_000) {
-    return (freqNum / 1_000_000_000).toFixed(2) + " GHz";
-  } else if (freqNum >= 1_000_000) {
-    return (freqNum / 1_000_000).toFixed(2) + " MHz";
-  } else if (freqNum >= 1_000) {
-    return (freqNum / 1_000).toFixed(2) + " kHz";
-  } else {
-    return freqNum + " Hz";
+
+  // Apply Doppler shift if factor is provided
+  let freqNum = Number(freq);
+  if (dopplerFactor !== undefined) {
+    if (direction === "uplink") {
+      freqNum = freqNum / dopplerFactor;
+    } else if (direction === "downlink") {
+      freqNum = freqNum * dopplerFactor;
+    }
   }
+
+  // Determine appropriate unit and precision
+  let value: number;
+  let unit: string;
+  let precision: number;
+
+  if (freqNum >= 1_000_000_000) {
+    value = freqNum / 1_000_000_000;
+    unit = "GHz";
+    precision = 6;
+  } else if (freqNum >= 1_000_000) {
+    value = freqNum / 1_000_000;
+    unit = "MHz";
+    precision = 6;
+  } else if (freqNum >= 1_000) {
+    value = freqNum / 1_000;
+    unit = "kHz";
+    precision = value >= 100 ? 2 : 3;
+  } else {
+    value = freqNum;
+    unit = "Hz";
+    precision = 0; // No decimals for Hz
+  }
+
+  // Format with appropriate precision, removing trailing zeros
+  const formatted = value.toFixed(precision).replace(/\.?0+$/, "");
+
+  return `${formatted} ${unit}`;
 };
 
 export const formatDate = (dateStr: string) => {
@@ -55,4 +89,18 @@ export const formatElevationClassName = (elevation: number) => {
   if (elevation <= 30) return "red";
   if (elevation <= 60) return "yellow";
   return "green";
+};
+
+export const formatTxDirection = (
+  tx: TransmitterEntity
+): "uplink" | "downlink" | "duplex" | "unknown" => {
+  if (tx.uplinkLow && tx.downlinkLow) {
+    return "duplex";
+  } else if (tx.uplinkLow) {
+    return "uplink";
+  } else if (tx.downlinkLow) {
+    return "downlink";
+  } else {
+    return "unknown";
+  }
 };

@@ -5,23 +5,16 @@ import {
   MoveVertical,
 } from "lucide-react";
 import type { TransmitterEntity } from "../model";
-import { formatFrequency } from "./helpers";
+import { formatFrequency, formatTxDirection } from "./helpers";
+import "../styles/TransmitterCard.scss";
 
-export default function TransmitterCard({ item }: { item: TransmitterEntity }) {
-  const formatTxDirection = (
-    tx: TransmitterEntity
-  ): "uplink" | "downlink" | "duplex" | "unknown" => {
-    if (tx.uplinkLow && tx.downlinkLow) {
-      return "duplex";
-    } else if (tx.uplinkLow) {
-      return "uplink";
-    } else if (tx.downlinkLow) {
-      return "downlink";
-    } else {
-      return "unknown";
-    }
-  };
-
+export default function TransmitterCard({
+  item,
+  dopplerFactor,
+}: {
+  item: TransmitterEntity;
+  dopplerFactor?: number | undefined;
+}) {
   const direction = formatTxDirection(item);
 
   return (
@@ -30,12 +23,16 @@ export default function TransmitterCard({ item }: { item: TransmitterEntity }) {
       {direction === "uplink" && <MoveUp />}
       {direction === "downlink" && <MoveDown />}
       {direction === "unknown" && <CircleQuestionMark />}
-      {item.uplinkLow && !item.downlinkLow && formatFrequency(item.uplinkLow)}
-      {item.downlinkLow && !item.uplinkLow && formatFrequency(item.downlinkLow)}
+      {item.uplinkLow &&
+        !item.downlinkLow &&
+        formatFrequency(item.uplinkLow, direction, dopplerFactor)}
+      {item.downlinkLow &&
+        !item.uplinkLow &&
+        formatFrequency(item.downlinkLow, direction, dopplerFactor)}
       {item.uplinkLow && item.downlinkLow && (
         <>
-          {formatFrequency(item.uplinkLow)} -{" "}
-          {formatFrequency(item.downlinkLow)}
+          {formatFrequency(item.uplinkLow, direction, dopplerFactor)} -{" "}
+          {formatFrequency(item.downlinkLow, direction, dopplerFactor)}
         </>
       )}
       <div>{item.description?.toString()}</div>
