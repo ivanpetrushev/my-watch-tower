@@ -1,6 +1,17 @@
 @import "./responsive.scss";
 
 .pass-details {
+  .pass-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    p {
+      color: #9ca3af;
+    }
+  }
+
   .pass-comparison-list {
     display: flex;
     flex-direction: column;
@@ -52,6 +63,13 @@
     }
   }
 
+  .transmitter-list {
+    margin-bottom: 1rem;
+    h2 {
+      margin-bottom: 0.75rem;
+    }
+  }
+
   .sky {
     margin-bottom: 1rem;
     .pass-timing {
@@ -72,5 +90,14 @@
         justify-content: space-between;
       }
     }
+  }
+
+  .ground {
+    display: flex;
+    flex-direction: column;
+    @include md {
+      flex-direction: row;
+    }
+    gap: 1rem;
   }
 }

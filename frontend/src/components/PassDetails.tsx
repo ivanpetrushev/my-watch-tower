@@ -15,6 +15,7 @@ import * as satellite from "satellite.js";
 import type { GroundStationEntity, SatelliteEntity } from "../model";
 import { useEffect, useMemo, useState } from "react";
 import SegmentProgress from "./SegmentProgress";
+import TransmitterCard from "./TransmitterCard";
 
 const calculateAngle = ({
   groundStation,
@@ -165,9 +166,21 @@ export default function PassDetails() {
       {data && (
         <>
           <div className="pass-header">
-            <h1>{data?.satellite?.name}</h1>
-            <p>NORAD ID: {data?.satellite?.id}</p>
+            <div className="col">
+              <h1>{data?.satellite?.name}</h1>
+              <p>NORAD ID: {data?.satellite?.id}</p>
+              <p>{data?.satellite?.tags.map((t) => t.name).join(", ")}</p>
+            </div>
+
             <p>Orbit number: {data?.orbitNumber}</p>
+            <div className="col">
+              <h2>{data?.groundStation?.name}</h2>
+              {satellitePosition && (
+                <p>Range: {Math.round(satellitePosition.rangeSat)} km</p>
+              )}
+            </div>
+
+            {/* TODO: satellite range, doppler shift at AOS/LOS/current time */}
           </div>
           <div className="sky">
             <HorizonCanvas
@@ -192,6 +205,7 @@ export default function PassDetails() {
                   : []
               }
             ></HorizonCanvas>
+            {/* TODO: map with satellite footprint */}
             <div className="pass-timing">
               <div className="controls">
                 <div className="current-time">
@@ -222,51 +236,65 @@ export default function PassDetails() {
               </div>
             </div>
           </div>
-          <div className="pass-comparison">
-            {comparisonData && comparisonData.length > 0 ? (
-              <div className="pass-comparison-list">
-                <h2>Comparison with other passes in the same orbit:</h2>
-                {comparisonData.map((pass) => (
-                  <Link
-                    key={pass.id}
-                    to={`/pass-events/${pass.id}`}
-                    className="pass-comparison-card"
-                  >
-                    <h3 className="col">
-                      {pass.groundStationId === data?.groundStationId && (
-                        <Check />
-                      )}
-                      <span>{pass.groundStation.name}</span>
-                    </h3>
-                    <div className="col">{formatDate(pass.aos)}</div>
-                    <div className="col">{formatDate(pass.los)}</div>
-                    <div className="elevation col large">
-                      <div
-                        className={`visible ${formatElevationClassName(
-                          pass.maxVisibleElevation
-                        )}`}
-                      >
-                        <TriangleRight /> {pass.maxVisibleElevation.toFixed(0)}°
+          <div className="ground">
+            <div className="transmitter-list">
+              <h2>Transmitters (Doppler adjusted)</h2>
+              {data.satellite.transmitters.map((tx) => (
+                <TransmitterCard
+                  key={tx.id}
+                  item={tx}
+                  dopplerFactor={satellitePosition?.dopplerFactor}
+                />
+              ))}
+            </div>
+            {/* TODO: satellite transmitter list */}
+            <div className="pass-comparison">
+              {comparisonData && comparisonData.length > 0 ? (
+                <div className="pass-comparison-list">
+                  <h2>Comparison with other passes in the same orbit:</h2>
+                  {comparisonData.map((pass) => (
+                    <Link
+                      key={pass.id}
+                      to={`/pass-events/${pass.id}`}
+                      className="pass-comparison-card"
+                    >
+                      <h3 className="col">
+                        {pass.groundStationId === data?.groundStationId && (
+                          <Check />
+                        )}
+                        <span>{pass.groundStation.name}</span>
+                      </h3>
+                      <div className="col">{formatDate(pass.aos)}</div>
+                      <div className="col">{formatDate(pass.los)}</div>
+                      <div className="elevation col large">
+                        <div
+                          className={`visible ${formatElevationClassName(
+                            pass.maxVisibleElevation
+                          )}`}
+                        >
+                          <TriangleRight />{" "}
+                          {pass.maxVisibleElevation.toFixed(0)}°
+                        </div>
+                        <div className="max">
+                          ({pass.maxElevation.toFixed(0)}° max possible)
+                        </div>
                       </div>
-                      <div className="max">
-                        ({pass.maxElevation.toFixed(0)}° max possible)
+                      <div className="duration col large">
+                        <div className="visible">
+                          <ClockFading />{" "}
+                          {formatDuration(pass.totalVisibleDuration)}
+                        </div>
+                        <div className="max">
+                          ({formatDuration(pass.duration)} max possible)
+                        </div>
                       </div>
-                    </div>
-                    <div className="duration col large">
-                      <div className="visible">
-                        <ClockFading />{" "}
-                        {formatDuration(pass.totalVisibleDuration)}
-                      </div>
-                      <div className="max">
-                        ({formatDuration(pass.duration)} max possible)
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <p>No other passes found for this orbit.</p>
-            )}
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p>No other passes found for this orbit.</p>
+              )}
+            </div>
           </div>
         </>
       )}
