@@ -11,6 +11,7 @@ import "@/styles/Timeline.scss";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { PassEventEntity } from "../model";
 import PassEventCard from "./PassEventCard";
+import { Link } from "react-router-dom";
 
 const calculateXPosition = (
   eventTime: string,
@@ -289,7 +290,10 @@ export default function Timeline() {
       {isFetchingNextPage && <p>Loading more...</p>}
 
       <div className="timeline-content">
-        <p>Select pass/satellite on timeline. Total events: {allPassEvents.length}</p>
+        <p>
+          Select pass/satellite on timeline. Total events:{" "}
+          {allPassEvents.length}
+        </p>
         {/* Elevation axis (left) */}
         <div className="board-container">
           <div className="elevation-axis">
@@ -396,7 +400,11 @@ export default function Timeline() {
             </div>
           ))}
         </div>
-        {focusedPassEvent && <PassEventCard item={focusedPassEvent} />}
+        {focusedPassEvent && (
+          <Link to={`/pass-events/${focusedPassEvent.id}`}>
+            <PassEventCard item={focusedPassEvent} />
+          </Link>
+        )}
       </div>
     </div>
   );
