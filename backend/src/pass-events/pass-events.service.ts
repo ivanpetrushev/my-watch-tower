@@ -117,11 +117,31 @@ export class PassEventsService {
     return where;
   }
 
+  public timeFiltersToPrismaWhereInput(params: {
+    beginTime: string;
+    endTime: string;
+  }): Prisma.PassEventWhereInput {
+    const { beginTime, endTime } = params;
+    const where: Prisma.PassEventWhereInput = {};
+    if (beginTime) {
+      where.aos = {
+        gte: new Date(beginTime),
+      };
+    }
+    if (endTime) {
+      where.los = {
+        lte: new Date(endTime),
+      };
+    }
+    return where;
+  }
+
   async findAllByGroundStationId({
     groundStationId,
     page = 1,
     satelliteFilters,
     passEventFilters,
+    timeFilters,
   }: {
     groundStationId: number;
     page?: number;
@@ -136,6 +156,10 @@ export class PassEventsService {
       browserLocalTzOffsetMinutes?: string;
       timingFilters?: string;
     };
+    timeFilters: {
+      beginTime: string;
+      endTime: string;
+    };
   }) {
     const take = 10;
     const skip = (page - 1) * take;
@@ -147,6 +171,7 @@ export class PassEventsService {
     const passEventWhere = this.passEventFiltersToPrismaWhereInput(
       passEventFilters || {},
     );
+    const timeWhere = this.timeFiltersToPrismaWhereInput(timeFilters);
     const where = {
       groundStationId,
       ...(satelliteWhere && {
@@ -156,6 +181,9 @@ export class PassEventsService {
       }),
       ...(passEventWhere && {
         ...passEventWhere,
+      }),
+      ...(timeWhere && {
+        ...timeWhere,
       }),
     };
     // console.log(

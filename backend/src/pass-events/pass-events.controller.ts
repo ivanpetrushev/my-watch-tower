@@ -29,6 +29,10 @@ export class PassEventsController {
         browserLocalTzOffsetMinutes: query?.browserLocalTzOffsetMinutes,
         timingFilters: query?.timingFilters,
       },
+      timeFilters: {
+        beginTime: query?.beginTime,
+        endTime: query?.endTime,
+      },
       page: query.page ? parseInt(query.page, 10) : undefined,
     });
   }

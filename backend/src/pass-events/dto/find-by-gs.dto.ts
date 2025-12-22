@@ -34,9 +34,23 @@ export class BasePassEventFiltersDto {
   browserLocalTzOffsetMinutes?: string;
 }
 
+export class TimeFiltersDto {
+  @ApiProperty({
+    required: false,
+    description: 'Minimum time in Y-m-d HH:MM:SS format',
+  })
+  beginTime: string;
+  @ApiProperty({
+    required: false,
+    description: 'Maximum time in Y-m-d HH:MM:SS format',
+  })
+  endTime: string;
+}
+
 export class FindByGsDto extends IntersectionType(
   BasePassEventFiltersDto,
   BaseSatelliteFiltersDto,
+  TimeFiltersDto,
 ) {
   @ApiProperty({ description: 'Ground Station ID' })
   groundStationId: string;
