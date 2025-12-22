@@ -40,6 +40,14 @@ name?: string;
  */
 frequencyFilters?: string;
 /**
+ * Minimum time in Y-m-d HH:MM:SS format
+ */
+beginTime?: string;
+/**
+ * Maximum time in Y-m-d HH:MM:SS format
+ */
+endTime?: string;
+/**
  * Ground Station ID
  */
 groundStationId: string;

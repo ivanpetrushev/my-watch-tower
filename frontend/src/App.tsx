@@ -7,6 +7,7 @@ import StationEditor from "./components/StationEditor";
 import PassEvents from "./components/PassEvents";
 import SatelliteList from "./components/SatelliteList";
 import PassDetails from "./components/PassDetails";
+import Timeline from "./components/Timeline";
 
 function App() {
   return (
@@ -14,7 +15,6 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<PassEvents />} />
-          {/* Stations CRUD */}
           <Route path="/stations" element={<StationsList />} />
           <Route
             path="/stations/new"
@@ -26,6 +26,7 @@ function App() {
           />
           <Route path="/satellite-list" element={<SatelliteList />} />
           <Route path="/pass-events/:id" element={<PassDetails />} />
+          <Route path="/timeline" element={<Timeline />} />
         </Routes>
       </Layout>
     </BrowserRouter>
