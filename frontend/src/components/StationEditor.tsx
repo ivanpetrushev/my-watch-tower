@@ -73,52 +73,56 @@ export default function StationEditor({ mode }: { mode: "create" | "edit" }) {
 
   return (
     <div>
-      <h1>{mode === "create" ? "Create New Station" : "Edit Station"}</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>
-            <div>Name:</div>
-            <input {...register("name")} />
-          </label>
-        </div>
-        <div>
-          <label>
-            <div>Latitude:</div>
-            <input
-              type="number"
-              step="any"
-              {...register("latitude", { valueAsNumber: true })}
+      <h2>{mode === "create" ? "Create New Station" : "Edit Station"}</h2>
+      <form className="edit-station" onSubmit={handleSubmit(onSubmit)}>
+        <div className="sections">
+          <div className="left-section">
+            <h3>Location</h3>
+            <div>
+              <label>
+                <div>Name:</div>
+                <input type="text" {...register("name")} />
+              </label>
+            </div>
+            <div>
+              <label>
+                <div>Latitude:</div>
+                <input
+                  type="number"
+                  step="any"
+                  {...register("latitude", { valueAsNumber: true })}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                <div>Longitude:</div>
+                <input
+                  type="number"
+                  step="any"
+                  {...register("longitude", { valueAsNumber: true })}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                <div>Altitude:</div>
+                <input
+                  type="number"
+                  step="any"
+                  {...register("altitude", { valueAsNumber: true })}
+                />
+              </label>
+            </div>
+          </div>
+          <div className="right-section">
+            <h3>Horizon Mask</h3>
+            <HorizonCanvas
+              value={displayHorizonMask}
+              onChange={setHorizonMask}
             />
-          </label>
+          </div>
         </div>
-        <div>
-          <label>
-            <div>Longitude:</div>
-            <input
-              type="number"
-              step="any"
-              {...register("longitude", { valueAsNumber: true })}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            <div>Altitude:</div>
-            <input
-              type="number"
-              step="any"
-              {...register("altitude", { valueAsNumber: true })}
-            />
-          </label>
-        </div>
-        <h3>Horizon Mask</h3>
-        <HorizonCanvas value={displayHorizonMask} onChange={setHorizonMask} />
-        <textarea
-          readOnly
-          value={displayHorizonMask}
-          style={{ width: "100%", height: "100px", marginTop: "10px" }}
-        />
-        <div></div>
         <button
           type="submit"
           disabled={createMutation.isPending || updateMutation.isPending}
@@ -127,6 +131,7 @@ export default function StationEditor({ mode }: { mode: "create" | "edit" }) {
             ? "Saving..."
             : "Save"}
         </button>
+        {/* TODO: add Delete button, if in edit mode */}
       </form>
     </div>
   );

@@ -1,25 +1,32 @@
 import { Link } from "react-router-dom";
 import { useGetAllGroundStations } from "../api/generated/ground-stations/ground-stations";
 import type { GroundStationEntity } from "../model";
+import "@/styles/StationsList.scss";
 
 export default function StationsList() {
   const { data, isLoading, error } = useGetAllGroundStations();
   return (
-    <div>
-      <h2>Ground Stations</h2>
+    <div className="ground-stations">
+      <div className="section-header">
+        <h2>Ground Stations </h2>
+        <Link to="/stations/new" className="btn green">
+          + Create New Station
+        </Link>
+      </div>
       {isLoading && <p>Loading ground stations...</p>}
       {error && <p>Error loading ground stations: {String(error)}</p>}
+
       {data && (
-        <ul>
+        <div className="station-list">
           {data.map((station: GroundStationEntity) => (
-            <li key={station.id}>
-              <Link to={`/stations/${station.id}/edit`}>Edit</Link> -
-              {station.name} - ({station.latitude}, {station.longitude})
-            </li>
+            <Link key={station.id} to={`/stations/${station.id}/edit`}>
+              <div className="station-card">
+                {station.name} - ({station.latitude}, {station.longitude})
+              </div>
+            </Link>
           ))}
-        </ul>
+        </div>
       )}
-      <Link to="/stations/new">Create New Station</Link>
     </div>
   );
 }
