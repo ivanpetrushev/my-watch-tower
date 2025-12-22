@@ -70,6 +70,70 @@ const getColorForSatellite = (satelliteId: number) => {
   return colorPalette[satelliteId % colorPalette.length];
 };
 
+// time ticks
+
+const generateTimeTicks = (
+  beginTime: Date,
+  endTime: Date,
+  windowHours: number
+) => {
+  const ticks: { time: Date; position: number; label: string }[] = [];
+
+  // Determine tick interval based on window size
+  let intervalMinutes: number;
+  if (windowHours <= 1) {
+    intervalMinutes = 10; // Every 10 minutes for 1 hour
+  } else if (windowHours <= 6) {
+    intervalMinutes = 30; // Every 30 minutes for up to 6 hours
+  } else if (windowHours <= 12) {
+    intervalMinutes = 60; // Every hour for up to 12 hours
+  } else if (windowHours <= 24) {
+    intervalMinutes = 120; // Every 2 hours for up to 24 hours
+  } else {
+    intervalMinutes = 240; // Every 4 hours for longer windows
+  }
+
+  const startTime = new Date(beginTime);
+  // Round to nearest interval
+  startTime.setMinutes(
+    Math.ceil(startTime.getMinutes() / intervalMinutes) * intervalMinutes,
+    0,
+    0
+  );
+
+  let currentTime = new Date(startTime);
+
+  while (currentTime <= endTime) {
+    const position = calculateXPosition(
+      currentTime.toISOString(),
+      beginTime,
+      endTime
+    );
+    const label = currentTime.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    ticks.push({ time: currentTime, position, label });
+    currentTime = new Date(currentTime.getTime() + intervalMinutes * 60 * 1000);
+  }
+
+  return ticks;
+};
+
+const generateElevationTicks = () => {
+  const ticks: { elevation: number; position: number }[] = [];
+
+  // Ticks at 0, 15, 30, 45, 60, 75, 90 degrees
+  for (let elevation = 0; elevation <= 90; elevation += 15) {
+    const position = calculateYPosition(elevation, 90);
+    ticks.push({ elevation, position });
+  }
+
+  return ticks;
+};
+
 export default function Timeline() {
   const [windowHours, setWindowHours] = useState<number>(6);
   const windowHoursOptions = [1, 6, 12, 24, 48];
@@ -147,6 +211,7 @@ export default function Timeline() {
     }
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+  // for generating the board legend
   const uniqueSatellites = useMemo(() => {
     const satelliteMap: Record<number, string> = {};
     allPassEvents.forEach((event) => {
@@ -157,6 +222,13 @@ export default function Timeline() {
       name,
     }));
   }, [allPassEvents]);
+
+  const timeTicks = useMemo(
+    () => generateTimeTicks(beginTime, endTime, windowHours),
+    [beginTime, endTime, windowHours]
+  );
+
+  const elevationTicks = useMemo(() => generateElevationTicks(), []);
 
   return (
     <div className="timeline">
@@ -173,7 +245,7 @@ export default function Timeline() {
       <PassFilters />
       {error && <p>Error loading pass events: {String(error)}</p>}
       <div className="controls">
-        <div className="beginTime">
+        <div className="begin-time">
           Start: {formatDate(beginTime.toISOString())}
         </div>
         <div className="prev-window">
@@ -187,7 +259,7 @@ export default function Timeline() {
             &lt; Prev
           </button>
         </div>
-        <div className="windowHours">
+        <div className="window-hours">
           Window Hours:{" "}
           <select
             value={windowHours}
@@ -211,38 +283,93 @@ export default function Timeline() {
             Next &gt;
           </button>
         </div>
-        <div className="endTime">End: {formatDate(endTime.toISOString())}</div>
+        <div className="end-time">End: {formatDate(endTime.toISOString())}</div>
       </div>
       {status === "pending" && <p>Loading...</p>}
       {isFetchingNextPage && <p>Loading more...</p>}
 
       <div className="timeline-content">
-        <p>Total events: {allPassEvents.length}</p>
-        <div className="board">
-          {allPassEvents.map((event) => (
+        <p>Select pass/satellite on timeline. Total events: {allPassEvents.length}</p>
+        {/* Elevation axis (left) */}
+        <div className="board-container">
+          <div className="elevation-axis">
+            {elevationTicks.map((tick) => (
+              <div
+                key={tick.elevation}
+                className="elevation-tick"
+                style={{ top: `${tick.position}%` }}
+              >
+                <span className="tick-label">{tick.elevation}°</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Main board */}
+          <div className="board">
+            {/* Time grid lines (vertical) */}
+            {timeTicks.map((tick, index) => (
+              <div
+                key={index}
+                className="time-grid-line"
+                style={{ left: `${tick.position}%` }}
+              />
+            ))}
+
+            {/* Elevation grid lines (horizontal) */}
+            {elevationTicks.map((tick) => (
+              <div
+                key={tick.elevation}
+                className="elevation-grid-line"
+                style={{ top: `${tick.position}%` }}
+              />
+            ))}
+
+            {/* Pass event boxes */}
+            {allPassEvents.map((event) => (
+              <div
+                className={`pass-box ${
+                  focusedSatelliteId &&
+                  focusedSatelliteId !== event.satellite.id
+                    ? "dimmed"
+                    : ""
+                }`}
+                key={event.id}
+                style={
+                  {
+                    left: `${calculateXPosition(
+                      event.aos,
+                      beginTime,
+                      endTime
+                    )}%`,
+                    top: `${calculateYPosition(
+                      event.maxVisibleElevation,
+                      90
+                    )}%`,
+                    width: `${calculateWidthPercentage(
+                      event.aos,
+                      event.los,
+                      beginTime,
+                      endTime
+                    )}%`,
+                    "--item-color": getColorForSatellite(event.satellite.id),
+                  } as React.CSSProperties
+                }
+                onClick={() => setFocusedPassEvent(event)}
+              >
+                &nbsp;
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Time axis (bottom) */}
+        <div className="time-axis">
+          {timeTicks.map((tick, index) => (
             <div
-              className={`pass-box ${
-                focusedSatelliteId && focusedSatelliteId !== event.satellite.id
-                  ? "dimmed"
-                  : ""
-              }`}
-              key={event.id}
-              style={
-                {
-                  left: `${calculateXPosition(event.aos, beginTime, endTime)}%`,
-                  top: `${calculateYPosition(event.maxVisibleElevation, 90)}%`,
-                  width: `${calculateWidthPercentage(
-                    event.aos,
-                    event.los,
-                    beginTime,
-                    endTime
-                  )}%`,
-                  "--item-color": getColorForSatellite(event.satellite.id),
-                } as React.CSSProperties
-              }
-              onClick={() => setFocusedPassEvent(event)}
+              key={index}
+              className="time-tick"
+              style={{ left: `${tick.position}%` }}
             >
-              &nbsp;
+              <span className="tick-label">{tick.label}</span>
             </div>
           ))}
         </div>
