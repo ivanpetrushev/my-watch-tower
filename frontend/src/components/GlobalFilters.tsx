@@ -15,7 +15,7 @@ import { useState } from "react";
 import { formatFrequency } from "./helpers";
 
 export default function GlobalFilters() {
-  const [isCollapsed, setCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const { data } = useGetTags();
   const { filters, setFilters } = useFilterStore();
   const { register, handleSubmit, reset, control } = useForm<FilterState>({
@@ -88,7 +88,7 @@ export default function GlobalFilters() {
 
   return (
     <form className="global-filters" onSubmit={handleSubmit(onSubmit)}>
-      <h3 onClick={() => setCollapsed(!isCollapsed)}>
+      <h3 onClick={() => setIsCollapsed(!isCollapsed)}>
         <span>
           <Funnel /> Global Filters
         </span>

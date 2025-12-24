@@ -3,7 +3,7 @@ import { useSkyViewTimeStore } from "../stores/skyViewTimeStore";
 import { ChevronDown, ChevronUp, Clock } from "lucide-react";
 
 export default function SkyViewTimeControls() {
-  const [isCollapsed, setCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const { isRealtime, setIsRealtime, currentTime, setCurrentTime } =
     useSkyViewTimeStore();
 
@@ -48,7 +48,7 @@ export default function SkyViewTimeControls() {
 
   return (
     <div className="sky-view-time-controls">
-      <h3 onClick={() => setCollapsed(!isCollapsed)}>
+      <h3 onClick={() => setIsCollapsed(!isCollapsed)}>
         <span>
           <Clock /> Time control
         </span>
