@@ -55,11 +55,9 @@ export default function SkyView() {
   // fetch passes for cache window
   const {
     data,
-    // error,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    // status,
   } = useInfiniteQuery({
     queryKey: [
       "pass-events-timeline",
@@ -95,7 +93,7 @@ export default function SkyView() {
   });
 
   // Auto-fetch all pages on mount/filter change
-  useMemo(() => {
+  useEffect(() => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }

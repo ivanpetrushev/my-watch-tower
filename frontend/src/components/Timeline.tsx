@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGetAllGroundStations } from "../api/generated/ground-stations/ground-stations";
 import { getPassEventsByGroundStationId } from "../api/generated/pass-events/pass-events";
 import { useCurrentGroundStationStore } from "../stores/currentGroundStationStore";
@@ -161,7 +161,6 @@ export default function Timeline() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    status,
   } = useInfiniteQuery({
     queryKey: [
       "pass-events-timeline",
@@ -206,7 +205,7 @@ export default function Timeline() {
   }, [data]);
 
   // Auto-fetch all pages on mount/filter change
-  useMemo(() => {
+  useEffect(() => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
@@ -286,8 +285,6 @@ export default function Timeline() {
         </div>
         <div className="end-time">End: {formatDate(endTime.toISOString())}</div>
       </div>
-      {status === "pending" && <p>Loading...</p>}
-      {isFetchingNextPage && <p>Loading more...</p>}
 
       <div className="timeline-content">
         <p>
