@@ -130,7 +130,7 @@ export default function SkyView() {
         ourSatellite: data.satellite,
         time: currentTime,
       });
-      if (pos === undefined) {
+      if (pos === null) {
         return null;
       }
 

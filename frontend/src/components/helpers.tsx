@@ -122,7 +122,7 @@ export const calculateAngle = ({
   latitude: number;
   longitude: number;
   height: number;
-} | undefined => {
+} | null => {
   const satrec = satellite.twoline2satrec(
     ourSatellite.line1,
     ourSatellite.line2
@@ -130,7 +130,7 @@ export const calculateAngle = ({
   const positionAndVelocity = satellite.propagate(satrec, new Date(time));
   if (positionAndVelocity === null) {
     console.error(`Failed to propagate satellite`);
-    return;
+    return null;
   }
   const positionEci = positionAndVelocity.position;
   const velocityEci = positionAndVelocity.velocity;
