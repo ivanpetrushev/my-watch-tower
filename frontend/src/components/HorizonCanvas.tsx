@@ -5,6 +5,9 @@ interface SatellitePoint {
   elevation: number; // 0-90
   label: string;
   color?: string;
+  latitude?: number;
+  longitude?: number;
+  height?: number;
 }
 
 interface SatellitePath {
@@ -145,7 +148,7 @@ export const HorizonCanvas: React.FC<HorizonCanvasProps> = ({
           path.points[midIdx].elevation
         );
         ctx.fillStyle = path.color || "#0066ff";
-        ctx.font = "10px Arial";
+        ctx.font = "12px Arial";
         ctx.fillText(path.label, x + 5, y - 5);
       }
     });
@@ -162,7 +165,7 @@ export const HorizonCanvas: React.FC<HorizonCanvasProps> = ({
 
       // Draw label
       ctx.fillStyle = "#000";
-      ctx.font = "bold 11px Arial";
+      ctx.font = "bold 13px Arial";
       ctx.fillText(sat.label, x + 8, y - 8);
     });
   }, [width, height, satellites, paths, radius, centerX, centerY, azElToXY]);

@@ -22,8 +22,8 @@ export default function Navbar() {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/sky-now">
-              <Target /> <span className="only-above-md">Sky Now</span>
+            <NavLink to="/sky-view">
+              <Target /> <span className="only-above-md">Sky View</span>
             </NavLink>
           </li>
           <li>

@@ -1,5 +1,6 @@
 @import "./responsive.scss";
 
+.sky-view-time-controls,
 .pass-filters,
 .global-filters {
   background-color: #111827;
@@ -116,6 +117,12 @@
         background-color: #374151;
         color: white;
       }
+    }
+  }
+
+  .controls {
+    &.collapsed {
+      display: none;
     }
   }
 }

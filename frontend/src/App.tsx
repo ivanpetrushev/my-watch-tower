@@ -8,6 +8,7 @@ import PassEvents from "./components/PassEvents";
 import SatelliteList from "./components/SatelliteList";
 import PassDetails from "./components/PassDetails";
 import Timeline from "./components/Timeline";
+import SkyView from "./components/SkyView";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/satellite-list" element={<SatelliteList />} />
           <Route path="/pass-events/:id" element={<PassDetails />} />
           <Route path="/timeline" element={<Timeline />} />
+          <Route path="/sky-view" element={<SkyView />} />
         </Routes>
       </Layout>
     </BrowserRouter>

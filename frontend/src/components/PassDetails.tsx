@@ -4,6 +4,7 @@ import {
   useGetPassEventById,
 } from "../api/generated/pass-events/pass-events";
 import {
+  calculateAngle,
   formatDate,
   formatDuration,
   formatElevationClassName,
@@ -11,70 +12,10 @@ import {
 import "@/styles/PassDetails.scss";
 import { Check, ClockFading, TriangleRight } from "lucide-react";
 import HorizonCanvas from "./HorizonCanvas";
-import * as satellite from "satellite.js";
-import type { GroundStationEntity, SatelliteEntity } from "../model";
 import { useEffect, useMemo, useState } from "react";
 import SegmentProgress from "./SegmentProgress";
 import TransmitterCard from "./TransmitterCard";
 import MapFootprint from "./MapFootprint";
-
-const calculateAngle = ({
-  groundStation,
-  ourSatellite,
-  time,
-}: {
-  groundStation: GroundStationEntity;
-  ourSatellite: SatelliteEntity;
-  time: Date;
-}) => {
-  const satrec = satellite.twoline2satrec(
-    ourSatellite.line1,
-    ourSatellite.line2
-  );
-  const positionAndVelocity = satellite.propagate(satrec, new Date(time));
-  if (positionAndVelocity === null) {
-    console.error(`Failed to propagate satellite`);
-    return;
-  }
-  const positionEci = positionAndVelocity.position;
-  const velocityEci = positionAndVelocity.velocity;
-
-  const observerGd = {
-    longitude: satellite.degreesToRadians(groundStation.longitude),
-    latitude: satellite.degreesToRadians(groundStation.latitude),
-    height: groundStation.altitude / 1000, // meters to km
-  };
-
-  const gmst = satellite.gstime(new Date(time));
-
-  const positionEcf = satellite.eciToEcf(positionEci, gmst),
-    observerEcf = satellite.geodeticToEcf(observerGd),
-    positionGd = satellite.eciToGeodetic(positionEci, gmst),
-    lookAngles = satellite.ecfToLookAngles(observerGd, positionEcf);
-  const dopplerFactor = satellite.dopplerFactor(
-    observerEcf,
-    positionEcf,
-    velocityEci
-  );
-
-  const azimuth = lookAngles.azimuth,
-    elevation = lookAngles.elevation,
-    rangeSat = lookAngles.rangeSat;
-
-  const latitude = satellite.radiansToDegrees(positionGd.latitude),
-    longitude = satellite.radiansToDegrees(positionGd.longitude),
-    height = positionGd.height;
-
-  return {
-    azimuth: satellite.radiansToDegrees(azimuth),
-    elevation: satellite.radiansToDegrees(elevation),
-    rangeSat,
-    dopplerFactor,
-    latitude,
-    longitude,
-    height,
-  };
-};
 
 export default function PassDetails() {
   const { id } = useParams();
@@ -94,7 +35,6 @@ export default function PassDetails() {
       }
     }, 1000);
 
-    // Cleanup interval on unmount
     return () => clearInterval(interval);
   }, [isRealtime]);
 
@@ -229,6 +169,7 @@ export default function PassDetails() {
             />
           </div>
           <div className="pass-timing">
+            {/* TODO: AOS/LOS time (and azimuth?) */}
             <div className="controls">
               <div className="current-time">{currentTime.toLocaleString()}</div>
               <button onClick={() => setIsRealtime(!isRealtime)}>
@@ -266,7 +207,6 @@ export default function PassDetails() {
                 />
               ))}
             </div>
-            {/* TODO: satellite transmitter list */}
             <div className="pass-comparison">
               {comparisonData && comparisonData.length > 0 ? (
                 <div className="pass-comparison-list">

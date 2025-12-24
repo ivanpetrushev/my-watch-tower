@@ -1,4 +1,5 @@
-import type { TransmitterEntity } from "../model";
+import type { GroundStationEntity, SatelliteEntity, TransmitterEntity } from "../model";
+import * as satellite from "satellite.js";
 
 export const formatFrequency = (
   freq: number | null,
@@ -103,4 +104,70 @@ export const formatTxDirection = (
   } else {
     return "unknown";
   }
+};
+
+export const calculateAngle = ({
+  groundStation,
+  ourSatellite,
+  time,
+}: {
+  groundStation: GroundStationEntity;
+  ourSatellite: SatelliteEntity;
+  time: Date;
+}) : {
+  azimuth: number;
+  elevation: number;
+  rangeSat: number;
+  dopplerFactor: number;
+  latitude: number;
+  longitude: number;
+  height: number;
+} | undefined => {
+  const satrec = satellite.twoline2satrec(
+    ourSatellite.line1,
+    ourSatellite.line2
+  );
+  const positionAndVelocity = satellite.propagate(satrec, new Date(time));
+  if (positionAndVelocity === null) {
+    console.error(`Failed to propagate satellite`);
+    return;
+  }
+  const positionEci = positionAndVelocity.position;
+  const velocityEci = positionAndVelocity.velocity;
+
+  const observerGd = {
+    longitude: satellite.degreesToRadians(groundStation.longitude),
+    latitude: satellite.degreesToRadians(groundStation.latitude),
+    height: groundStation.altitude / 1000, // meters to km
+  };
+
+  const gmst = satellite.gstime(new Date(time));
+
+  const positionEcf = satellite.eciToEcf(positionEci, gmst),
+    observerEcf = satellite.geodeticToEcf(observerGd),
+    positionGd = satellite.eciToGeodetic(positionEci, gmst),
+    lookAngles = satellite.ecfToLookAngles(observerGd, positionEcf);
+  const dopplerFactor = satellite.dopplerFactor(
+    observerEcf,
+    positionEcf,
+    velocityEci
+  );
+
+  const azimuth = lookAngles.azimuth,
+    elevation = lookAngles.elevation,
+    rangeSat = lookAngles.rangeSat;
+
+  const latitude = satellite.radiansToDegrees(positionGd.latitude),
+    longitude = satellite.radiansToDegrees(positionGd.longitude),
+    height = positionGd.height;
+
+  return {
+    azimuth: satellite.radiansToDegrees(azimuth),
+    elevation: satellite.radiansToDegrees(elevation),
+    rangeSat,
+    dopplerFactor,
+    latitude,
+    longitude,
+    height,
+  };
 };

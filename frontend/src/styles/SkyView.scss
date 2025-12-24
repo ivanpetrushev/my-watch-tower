@@ -1,0 +1,40 @@
+@import "./responsive.scss";
+
+.sky-view {
+  .controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    @include md {
+      flex-direction: column;
+    }
+    .ymd-group,
+    .hms-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-direction: column;
+      @include md {
+        flex-direction: row;
+      }
+    }
+    .time-component {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 10rem;
+      .inputs {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+    }
+  }
+
+  .canvas-container {
+    display: flex;
+    justify-content: center;
+  }
+}
