@@ -5,6 +5,12 @@ export const DEFAULT_TLE_SOURCES = [
     parser: 'satnogsdbJson',
     updatedAt: '1970-01-01T00:00:00Z', // to trigger immediate update on first run
   },
+  {
+    name: 'Celestrak GOES',
+    url: 'https://celestrak.org/NORAD/elements/gp.php?GROUP=goes&FORMAT=tle',
+    parser: 'rawText',
+    updatedAt: '1970-01-01T00:00:00Z',
+  },
   // Note: all of these should be included in the SatNOGS DB as well
   // {
   //   name: 'Amateur Radio',

@@ -36,6 +36,7 @@ model Satellite {
   id           Int           @id // norad ID // @default(autoincrement())
   // noradId   Int      @unique // not going with separate field as this can be primary key
   name         String
+  // TODO: get in alternative names (from satnogsdb) and use it in search, too
   line1        String
   line2        String
   updatedAt    DateTime      @updatedAt

@@ -96,6 +96,19 @@ export class PredictorConsumer extends WorkerHost {
         currentStepIsCounted = false;
       }
     }
+    // finish the last segment, if still ongoing (for geostationary, it may be the only segment)
+    if (currentStepIsCounted && passStartTime) {
+      passEndTime = points[points.length - 1].time;
+      segments.push({
+        startTime: passStartTime,
+        endTime: passEndTime,
+        highestElevation,
+        points: passPoints,
+        duration: Math.floor(
+          (passEndTime.getTime() - passStartTime.getTime()) / 1000,
+        ),
+      });
+    }
     return segments;
   }
 

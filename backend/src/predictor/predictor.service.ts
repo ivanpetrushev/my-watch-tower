@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -6,30 +6,12 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Job, Queue } from 'bullmq';
 
 @Injectable()
-export class PredictorService implements OnModuleInit {
+export class PredictorService {
   private readonly logger = new Logger(PredictorService.name);
   constructor(
     private prisma: PrismaService,
     @InjectQueue('predictor') private predictorQueue: Queue,
   ) {}
-
-  onModuleInit() {
-    // const dateStart = new Date();
-    // const dateEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    // await this.predictorQueue.add('processSatelliteOverGroundStation', {
-    //   satelliteId: 29249, // MEO satelite
-    //   groundStationId: 6,
-    //   dateStart,
-    //   dateEnd,
-    // });
-    //
-    // await this.predictorQueue.add('processSatelliteOverGroundStation', {
-    //   satelliteId: 25544, // ISS
-    //   groundStationId: 2, // Plovdiv
-    //   dateStart,
-    //   dateEnd,
-    // });
-  }
 
   async cleanupQueue() {
     this.logger.log('Cleaning up predictor queue...');
@@ -113,9 +95,15 @@ export class PredictorService implements OnModuleInit {
   async debug() {
     const dateStart = new Date();
     const dateEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days ahead
+    // await this.predictorQueue.add('processSatelliteOverGroundStation', {
+    //   satelliteId: 59588,
+    //   groundStationId: 2,
+    //   dateStart,
+    //   dateEnd,
+    // });
     await this.predictorQueue.add('processSatelliteOverGroundStation', {
-      satelliteId: 59588,
-      groundStationId: 2,
+      satelliteId: 43700, // SO-100 geostationary
+      groundStationId: 2, // Plovdiv
       dateStart,
       dateEnd,
     });
