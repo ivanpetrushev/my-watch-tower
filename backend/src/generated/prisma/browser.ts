@@ -52,3 +52,8 @@ export type Transmitter = Prisma.TransmitterModel
  * 
  */
 export type PassEvent = Prisma.PassEventModel
+/**
+ * Model FilterPreset
+ * 
+ */
+export type FilterPreset = Prisma.FilterPresetModel

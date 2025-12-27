@@ -57,7 +57,8 @@ export const ModelName = {
   Tag: 'Tag',
   GroundStation: 'GroundStation',
   Transmitter: 'Transmitter',
-  PassEvent: 'PassEvent'
+  PassEvent: 'PassEvent',
+  FilterPreset: 'FilterPreset'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -176,6 +177,18 @@ export const PassEventScalarFieldEnum = {
 } as const
 
 export type PassEventScalarFieldEnum = (typeof PassEventScalarFieldEnum)[keyof typeof PassEventScalarFieldEnum]
+
+
+export const FilterPresetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  satelliteFilter: 'satelliteFilter',
+  passEventFilter: 'passEventFilter',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FilterPresetScalarFieldEnum = (typeof FilterPresetScalarFieldEnum)[keyof typeof FilterPresetScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -102,13 +102,13 @@ model PassEvent {
   satellite       Satellite     @relation(fields: [satelliteId], references: [id])
   orbitNumber     Int
 
-  aos          DateTime
-  los          DateTime
-  
+  aos DateTime
+  los DateTime
+
   // derived fields for easier filtering
-  aosTime      String // only "time" part of aos in "HH:mm" format
-  losTime      String // only "time" part of los in "HH:mm" format
-  aosDow       String // day of week for aos, e.g. "M", "T", "W", "Th", "F", "Sa", "Su"
+  aosTime String // only "time" part of aos in "HH:mm" format
+  losTime String // only "time" part of los in "HH:mm" format
+  aosDow  String // day of week for aos, e.g. "M", "T", "W", "Th", "F", "Sa", "Su"
 
   maxElevation Float
   duration     Int // in seconds
@@ -124,4 +124,15 @@ model PassEvent {
   updatedAt DateTime @updatedAt
 
   @@unique([satelliteId, groundStationId, orbitNumber])
+}
+
+model FilterPreset {
+  id              Int      @id @default(autoincrement())
+  name            String
+
+  satelliteFilter String // e.g. JSON with BaseSatelliteFiltersDto
+  passEventFilter String // e.g. JSON with BasePassEventFiltersDto
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

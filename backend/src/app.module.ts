@@ -19,6 +19,8 @@ import { PredictorConsumer } from './predictor/predictor.processor';
 import { ScheduleModule } from '@nestjs/schedule';
 import { GroundStationsController } from './ground-stations/ground-stations.controller';
 import { GroundStationsService } from './ground-stations/ground-stations.service';
+import { FilterPresetsController } from './filter-presets/filter-presets.controller';
+import { FilterPresetsService } from './filter-presets/filter-presets.service';
 
 @Module({
   imports: [
@@ -40,6 +42,7 @@ import { GroundStationsService } from './ground-stations/ground-stations.service
     TagsController,
     PassEventsController,
     GroundStationsController,
+    FilterPresetsController,
   ],
   providers: [
     AppService,
@@ -54,6 +57,7 @@ import { GroundStationsService } from './ground-stations/ground-stations.service
     PassEventsService,
     PredictorConsumer,
     GroundStationsService,
+    FilterPresetsService,
   ],
 })
 export class AppModule {}

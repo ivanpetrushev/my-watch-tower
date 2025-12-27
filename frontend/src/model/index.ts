@@ -6,7 +6,9 @@
  * OpenAPI spec version: 1.0
  */
 
+export * from './createFilterPresetDto';
 export * from './createGroundStationDto';
+export * from './filterPresetEntity';
 export * from './getPassEventsByGroundStationIdParams';
 export * from './getSatellitesParams';
 export * from './groundStationEntity';
@@ -31,4 +33,5 @@ export * from './transmitterEntityType';
 export * from './transmitterEntityUplinkHigh';
 export * from './transmitterEntityUplinkLow';
 export * from './uint8Array';
+export * from './updateFilterPresetDto';
 export * from './updateGroundStationDto';

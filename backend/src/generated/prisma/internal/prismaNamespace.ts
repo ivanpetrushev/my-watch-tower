@@ -390,7 +390,8 @@ export const ModelName = {
   Tag: 'Tag',
   GroundStation: 'GroundStation',
   Transmitter: 'Transmitter',
-  PassEvent: 'PassEvent'
+  PassEvent: 'PassEvent',
+  FilterPreset: 'FilterPreset'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "appConfig" | "tleSource" | "satellite" | "tag" | "groundStation" | "transmitter" | "passEvent"
+    modelProps: "appConfig" | "tleSource" | "satellite" | "tag" | "groundStation" | "transmitter" | "passEvent" | "filterPreset"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +929,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FilterPreset: {
+      payload: Prisma.$FilterPresetPayload<ExtArgs>
+      fields: Prisma.FilterPresetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FilterPresetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FilterPresetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload>
+        }
+        findFirst: {
+          args: Prisma.FilterPresetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FilterPresetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload>
+        }
+        findMany: {
+          args: Prisma.FilterPresetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload>[]
+        }
+        create: {
+          args: Prisma.FilterPresetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload>
+        }
+        createMany: {
+          args: Prisma.FilterPresetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FilterPresetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload>[]
+        }
+        delete: {
+          args: Prisma.FilterPresetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload>
+        }
+        update: {
+          args: Prisma.FilterPresetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload>
+        }
+        deleteMany: {
+          args: Prisma.FilterPresetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FilterPresetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FilterPresetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload>[]
+        }
+        upsert: {
+          args: Prisma.FilterPresetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPresetPayload>
+        }
+        aggregate: {
+          args: Prisma.FilterPresetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFilterPreset>
+        }
+        groupBy: {
+          args: Prisma.FilterPresetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FilterPresetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FilterPresetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FilterPresetCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1067,6 +1142,18 @@ export const PassEventScalarFieldEnum = {
 } as const
 
 export type PassEventScalarFieldEnum = (typeof PassEventScalarFieldEnum)[keyof typeof PassEventScalarFieldEnum]
+
+
+export const FilterPresetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  satelliteFilter: 'satelliteFilter',
+  passEventFilter: 'passEventFilter',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FilterPresetScalarFieldEnum = (typeof FilterPresetScalarFieldEnum)[keyof typeof FilterPresetScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1277,6 +1364,7 @@ export type GlobalOmitConfig = {
   groundStation?: Prisma.GroundStationOmit
   transmitter?: Prisma.TransmitterOmit
   passEvent?: Prisma.PassEventOmit
+  filterPreset?: Prisma.FilterPresetOmit
 }
 
 /* Types for Logging */

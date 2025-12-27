@@ -284,6 +284,7 @@ export class PredictorConsumer extends WorkerHost {
             ? Math.max(...obstructedSegments.map((seg) => seg.highestElevation))
             : 0,
       };
+      // Note: for geostationary orbits this would be insufficient - the same "pass" that hangs over one spot will be counted in different "orbit numbers"
       await this.prisma.passEvent.upsert({
         where: {
           satelliteId_groundStationId_orbitNumber: {
