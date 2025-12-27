@@ -1,5 +1,4 @@
 import { create } from "zustand";
-// import { persist } from "zustand/middleware";
 import type { FilterPresetEntity } from "../model";
 
 // satellite filter interfaces
@@ -75,7 +74,7 @@ export const useFilterStore = create<FilterStore>()((set, get) => ({
 
   clearAll: () => set({ satelliteFilters: {}, passEventFilters: {} }),
 
-  // no need for applyAll(), if listeting on store changes
+  // no need for applyAll(), if listening on store changes
   // applyAll: () => {
   // },
 

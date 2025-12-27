@@ -3,7 +3,7 @@ import { ChevronDown, ChevronUp, CircleX, Funnel, Trash2 } from "lucide-react";
 import "@/styles/GlobalFilters.scss";
 import { useEffect, useState } from "react";
 import { useFilterStore, type PassFilterState } from "../stores/filtersStore";
-import { useDebouncedCallback } from "@tanstack/react-pacer/debouncer";
+import { useDebouncedCallback } from "@tanstack/react-pacer";
 
 export default function PassFilters() {
   const [isCollapsed, setIsCollapsed] = useState(true);
