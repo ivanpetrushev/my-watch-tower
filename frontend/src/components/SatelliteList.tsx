@@ -3,7 +3,7 @@ import { useGetSatellites } from "../api/generated/satellites/satellites";
 import { useState } from "react";
 import SatelliteCard from "./SatelliteCard";
 import "@/styles/SatelliteList.scss";
-import GlobalFilters from "./GlobalFilters";
+import SatelliteFilters from "./SatelliteFilters";
 import { useFilterStore } from "../stores/globalFiltersStore";
 
 export default function SatelliteList() {
@@ -25,7 +25,7 @@ export default function SatelliteList() {
   return (
     <div>
       <h2>Satellites</h2>
-      <GlobalFilters />
+      <SatelliteFilters />
       {/* {isLoading && <p>Loading satellites...</p>} */}
       {error && <p>Error loading satellites: {String(error)}</p>}
       {data && data.items.length > 0 && (

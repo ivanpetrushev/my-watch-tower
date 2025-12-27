@@ -14,7 +14,7 @@ import { useFilterStore, type FilterState } from "../stores/globalFiltersStore";
 import { useState } from "react";
 import { formatFrequency } from "./helpers";
 
-export default function GlobalFilters() {
+export default function SatelliteFilters() {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const { data } = useGetTags();
   const { filters, setFilters } = useFilterStore();

@@ -2,7 +2,7 @@ import "@/styles/SkyView.scss";
 import { useEffect, useMemo, useState } from "react";
 import { useGetAllGroundStations } from "../api/generated/ground-stations/ground-stations";
 import { useCurrentGroundStationStore } from "../stores/currentGroundStationStore";
-import GlobalFilters from "./GlobalFilters";
+import SatelliteFilters from "./SatelliteFilters";
 import PassFilters from "./PassFilters";
 import { useSkyViewTimeStore } from "../stores/skyViewTimeStore";
 import SkyViewTimeControls from "./SkyViewTimeControls";
@@ -212,7 +212,7 @@ export default function SkyView() {
       </h2>
       {!groundStation && <p>Please select a ground station (above).</p>}
       <p>All times are local times to browser.</p>
-      <GlobalFilters />
+      <SatelliteFilters />
       <PassFilters />
       <SkyViewTimeControls />
       {groundStation && (

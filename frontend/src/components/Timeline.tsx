@@ -4,7 +4,7 @@ import { getPassEventsByGroundStationId } from "../api/generated/pass-events/pas
 import { useCurrentGroundStationStore } from "../stores/currentGroundStationStore";
 import { useFilterStore } from "../stores/globalFiltersStore";
 import { usePassEventsFilterStore } from "../stores/passEventFiltersStore";
-import GlobalFilters from "./GlobalFilters";
+import SatelliteFilters from "./SatelliteFilters";
 import PassFilters from "./PassFilters";
 import { formatDate } from "./helpers";
 import "@/styles/Timeline.scss";
@@ -241,7 +241,7 @@ export default function Timeline() {
         <p>Please select a ground station (above).</p>
       )}
       <p>All times are local times to browser.</p>
-      <GlobalFilters />
+      <SatelliteFilters />
       <PassFilters />
       {error && <p>Error loading pass events: {String(error)}</p>}
       <div className="controls">

@@ -5,7 +5,7 @@ import ReactPaginate from "react-paginate";
 import PassEventCard from "./PassEventCard";
 import "@/styles/PassEventList.scss";
 import { useGetAllGroundStations } from "../api/generated/ground-stations/ground-stations";
-import GlobalFilters from "./GlobalFilters";
+import SatelliteFilters from "./SatelliteFilters";
 import { useFilterStore } from "../stores/globalFiltersStore";
 import PassFilters from "./PassFilters";
 import { usePassEventsFilterStore } from "../stores/passEventFiltersStore";
@@ -53,7 +53,7 @@ export default function PassEvents() {
         <p>Please select a ground station (above).</p>
       )}
       <p>All times are local times to browser.</p>
-      <GlobalFilters />
+      <SatelliteFilters />
       <PassFilters />
       {error && <p>Error loading pass events: {String(error)}</p>}
       {data && data.items.length > 0 && (
