@@ -2,16 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useGetAllGroundStations } from "../api/generated/ground-stations/ground-stations";
 import { getPassEventsByGroundStationId } from "../api/generated/pass-events/pass-events";
 import { useCurrentGroundStationStore } from "../stores/currentGroundStationStore";
-import { useFilterStore } from "../stores/globalFiltersStore";
-import { usePassEventsFilterStore } from "../stores/passEventFiltersStore";
-import SatelliteFilters from "./SatelliteFilters";
-import PassFilters from "./PassFilters";
 import { formatDate } from "./helpers";
 import "@/styles/Timeline.scss";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { PassEventEntity } from "../model";
 import PassEventCard from "./PassEventCard";
 import { Link } from "react-router-dom";
+import FilterContainer from "./FilterContainer";
+import { useFilterStore } from "../stores/filtersStore";
 
 const calculateXPosition = (
   eventTime: string,
@@ -149,51 +147,47 @@ export default function Timeline() {
     end.setHours(end.getHours() + windowHours);
     return end;
   }, [beginTime, windowHours]);
-  const { filters } = useFilterStore();
-  const { filters: passEventFilters } = usePassEventsFilterStore();
+  // const { filters } = useSatelliteFilterStore();
+  // const { filters: passEventFilters } = usePassEventsFilterStore();
+  const {satelliteFilters, passEventFilters} = useFilterStore();
   const { data: groundStations } = useGetAllGroundStations();
   const { currentGroundStationId } = useCurrentGroundStationStore();
 
   // Use infinite query to fetch all pages
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: [
-      "pass-events-timeline",
-      currentGroundStationId,
-      filters,
-      passEventFilters,
-      beginTime.toISOString(),
-      endTime.toISOString(),
-    ],
-    queryFn: ({ pageParam = 1 }) =>
-      getPassEventsByGroundStationId({
-        page: pageParam.toString(),
-        groundStationId: currentGroundStationId?.toString() || "",
-        ...filters,
-        frequencyFilters: filters.frequencyFilters
-          ? JSON.stringify(filters.frequencyFilters)
-          : undefined,
-        ...passEventFilters,
-        timingFilters: passEventFilters.timingFilters
-          ? JSON.stringify(passEventFilters.timingFilters)
-          : undefined,
-        beginTime: beginTime.toISOString(),
-        endTime: endTime.toISOString(),
-      }),
-    getNextPageParam: (lastPage) => {
-      if (lastPage.page < lastPage.pageCount) {
-        return lastPage.page + 1;
-      }
-      return undefined;
-    },
-    initialPageParam: 1,
-    enabled: !!currentGroundStationId,
-  });
+  const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: [
+        "pass-events-timeline",
+        currentGroundStationId,
+        satelliteFilters,
+        passEventFilters,
+        beginTime.toISOString(),
+        endTime.toISOString(),
+      ],
+      queryFn: ({ pageParam = 1 }) =>
+        getPassEventsByGroundStationId({
+          page: pageParam.toString(),
+          groundStationId: currentGroundStationId?.toString() || "",
+          ...satelliteFilters,
+          frequencyFilters: satelliteFilters.frequencyFilters
+            ? JSON.stringify(satelliteFilters.frequencyFilters)
+            : undefined,
+          ...passEventFilters,
+          timingFilters: passEventFilters.timingFilters
+            ? JSON.stringify(passEventFilters.timingFilters)
+            : undefined,
+          beginTime: beginTime.toISOString(),
+          endTime: endTime.toISOString(),
+        }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.page < lastPage.pageCount) {
+          return lastPage.page + 1;
+        }
+        return undefined;
+      },
+      initialPageParam: 1,
+      enabled: !!currentGroundStationId,
+    });
 
   // Flatten all pages into a single array
   const allPassEvents = useMemo(() => {
@@ -241,8 +235,7 @@ export default function Timeline() {
         <p>Please select a ground station (above).</p>
       )}
       <p>All times are local times to browser.</p>
-      <SatelliteFilters />
-      <PassFilters />
+      <FilterContainer satelliteFilters={true} passFilters={true} />
       {error && <p>Error loading pass events: {String(error)}</p>}
       <div className="controls">
         <div className="begin-time">

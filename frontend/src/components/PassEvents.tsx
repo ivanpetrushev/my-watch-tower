@@ -5,25 +5,22 @@ import ReactPaginate from "react-paginate";
 import PassEventCard from "./PassEventCard";
 import "@/styles/PassEventList.scss";
 import { useGetAllGroundStations } from "../api/generated/ground-stations/ground-stations";
-import SatelliteFilters from "./SatelliteFilters";
-import { useFilterStore } from "../stores/globalFiltersStore";
-import PassFilters from "./PassFilters";
-import { usePassEventsFilterStore } from "../stores/passEventFiltersStore";
 import { Link } from "react-router-dom";
+import FilterContainer from "./FilterContainer";
+import { useFilterStore } from "../stores/filtersStore";
 
 export default function PassEvents() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { filters } = useFilterStore();
-  const { filters: passEventFilters } = usePassEventsFilterStore();
+  const { satelliteFilters, passEventFilters } = useFilterStore();
   const { data: groundStations } = useGetAllGroundStations();
   const { currentGroundStationId } = useCurrentGroundStationStore();
   const { data, error } = useGetPassEventsByGroundStationId(
     {
       page: currentPage.toString(),
       groundStationId: currentGroundStationId?.toString() || "",
-      ...filters,
-      frequencyFilters: filters.frequencyFilters
-        ? JSON.stringify(filters.frequencyFilters)
+      ...satelliteFilters,
+      frequencyFilters: satelliteFilters.frequencyFilters
+        ? JSON.stringify(satelliteFilters.frequencyFilters)
         : undefined,
       ...passEventFilters,
       timingFilters: passEventFilters.timingFilters
@@ -53,8 +50,7 @@ export default function PassEvents() {
         <p>Please select a ground station (above).</p>
       )}
       <p>All times are local times to browser.</p>
-      <SatelliteFilters />
-      <PassFilters />
+      <FilterContainer satelliteFilters={true} passFilters={true} />
       {error && <p>Error loading pass events: {String(error)}</p>}
       {data && data.items.length > 0 && (
         <>

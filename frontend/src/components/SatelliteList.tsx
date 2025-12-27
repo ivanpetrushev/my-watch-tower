@@ -3,17 +3,17 @@ import { useGetSatellites } from "../api/generated/satellites/satellites";
 import { useState } from "react";
 import SatelliteCard from "./SatelliteCard";
 import "@/styles/SatelliteList.scss";
-import SatelliteFilters from "./SatelliteFilters";
-import { useFilterStore } from "../stores/globalFiltersStore";
+import FilterContainer from "./FilterContainer";
+import { useFilterStore } from "../stores/filtersStore";
 
 export default function SatelliteList() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { filters } = useFilterStore();
+  const { satelliteFilters } = useFilterStore();
   const { data, error } = useGetSatellites({
     page: currentPage.toString(),
-    ...filters,
-    frequencyFilters: filters.frequencyFilters
-      ? JSON.stringify(filters.frequencyFilters)
+    ...satelliteFilters,
+    frequencyFilters: satelliteFilters.frequencyFilters
+      ? JSON.stringify(satelliteFilters.frequencyFilters)
       : undefined,
   });
 
@@ -25,7 +25,7 @@ export default function SatelliteList() {
   return (
     <div>
       <h2>Satellites</h2>
-      <SatelliteFilters />
+      <FilterContainer satelliteFilters={true} />
       {/* {isLoading && <p>Loading satellites...</p>} */}
       {error && <p>Error loading satellites: {String(error)}</p>}
       {data && data.items.length > 0 && (

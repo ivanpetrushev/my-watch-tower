@@ -21,6 +21,9 @@
       }
     }
   }
+  h4 {
+    padding-bottom: 0.5rem;
+  }
   .summary {
     color: #9ca3af;
     font-size: 0.875rem;
@@ -58,17 +61,6 @@
   .frequency-filters {
     margin-top: 1rem;
 
-    fieldset {
-      border: 1px solid #374151;
-      border-radius: 0.5rem;
-      padding: 1rem;
-
-      legend {
-        padding: 0 0.5rem;
-        color: #9ca3af;
-      }
-    }
-
     .timing-row,
     .frequency-row {
       display: flex;
@@ -88,7 +80,6 @@
       }
 
       .delete-btn {
-        background-color: #991b1b;
         border: none;
         border-radius: 0.375rem;
         padding: 0.5rem;

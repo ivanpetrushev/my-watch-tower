@@ -2,16 +2,14 @@ import "@/styles/SkyView.scss";
 import { useEffect, useMemo, useState } from "react";
 import { useGetAllGroundStations } from "../api/generated/ground-stations/ground-stations";
 import { useCurrentGroundStationStore } from "../stores/currentGroundStationStore";
-import SatelliteFilters from "./SatelliteFilters";
-import PassFilters from "./PassFilters";
 import { useSkyViewTimeStore } from "../stores/skyViewTimeStore";
 import SkyViewTimeControls from "./SkyViewTimeControls";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { usePassEventsFilterStore } from "../stores/passEventFiltersStore";
-import { useFilterStore } from "../stores/globalFiltersStore";
 import { getPassEventsByGroundStationId } from "../api/generated/pass-events/pass-events";
 import { calculateAngle } from "./helpers";
 import HorizonCanvas from "./HorizonCanvas";
+import FilterContainer from "./FilterContainer";
+import { useFilterStore } from "../stores/filtersStore";
 
 const PADDING = 1 * 60 * 60 * 1000;
 const CACHE_WINDOW = 4 * 60 * 60 * 1000;
@@ -20,8 +18,8 @@ const HALF_WINDOW = CACHE_WINDOW / 2;
 export default function SkyView() {
   const { isRealtime, currentTime, setCurrentTime } = useSkyViewTimeStore();
 
-  const { filters } = useFilterStore();
-  const { filters: passEventFilters } = usePassEventsFilterStore();
+  const { satelliteFilters, passEventFilters } = useFilterStore();
+  // const { filters: passEventFilters } = usePassEventsFilterStore();
   const { data: groundStations } = useGetAllGroundStations();
   const { currentGroundStationId } = useCurrentGroundStationStore();
 
@@ -53,44 +51,40 @@ export default function SkyView() {
   //\fetch window slide logic
 
   // fetch passes for cache window
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: [
-      "pass-events-timeline",
-      currentGroundStationId,
-      filters,
-      passEventFilters,
-      activeWindow.start.toISOString(),
-      activeWindow.end.toISOString(),
-    ],
-    queryFn: ({ pageParam = 1 }) =>
-      getPassEventsByGroundStationId({
-        page: pageParam.toString(),
-        groundStationId: currentGroundStationId?.toString() || "",
-        ...filters,
-        frequencyFilters: filters.frequencyFilters
-          ? JSON.stringify(filters.frequencyFilters)
-          : undefined,
-        ...passEventFilters,
-        timingFilters: passEventFilters.timingFilters
-          ? JSON.stringify(passEventFilters.timingFilters)
-          : undefined,
-        beginTime: activeWindow.start.toISOString(),
-        endTime: activeWindow.end.toISOString(),
-      }),
-    getNextPageParam: (lastPage) => {
-      if (lastPage.page < lastPage.pageCount) {
-        return lastPage.page + 1;
-      }
-      return undefined;
-    },
-    initialPageParam: 1,
-    enabled: !!currentGroundStationId,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: [
+        "pass-events-timeline",
+        currentGroundStationId,
+        satelliteFilters,
+        passEventFilters,
+        activeWindow.start.toISOString(),
+        activeWindow.end.toISOString(),
+      ],
+      queryFn: ({ pageParam = 1 }) =>
+        getPassEventsByGroundStationId({
+          page: pageParam.toString(),
+          groundStationId: currentGroundStationId?.toString() || "",
+          ...satelliteFilters,
+          frequencyFilters: satelliteFilters.frequencyFilters
+            ? JSON.stringify(satelliteFilters.frequencyFilters)
+            : undefined,
+          ...passEventFilters,
+          timingFilters: passEventFilters.timingFilters
+            ? JSON.stringify(passEventFilters.timingFilters)
+            : undefined,
+          beginTime: activeWindow.start.toISOString(),
+          endTime: activeWindow.end.toISOString(),
+        }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.page < lastPage.pageCount) {
+          return lastPage.page + 1;
+        }
+        return undefined;
+      },
+      initialPageParam: 1,
+      enabled: !!currentGroundStationId,
+    });
 
   // Auto-fetch all pages on mount/filter change
   useEffect(() => {
@@ -212,8 +206,7 @@ export default function SkyView() {
       </h2>
       {!groundStation && <p>Please select a ground station (above).</p>}
       <p>All times are local times to browser.</p>
-      <SatelliteFilters />
-      <PassFilters />
+      <FilterContainer satelliteFilters={true} passFilters={true} />
       <SkyViewTimeControls />
       {groundStation && (
         <div className="canvas-container">

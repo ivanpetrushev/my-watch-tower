@@ -1,20 +1,18 @@
 import { useFieldArray, useForm } from "react-hook-form";
-import {
-  usePassEventsFilterStore,
-  type PassFilterState,
-} from "../stores/passEventFiltersStore";
-import { Check, ChevronDown, ChevronUp, CircleX, Funnel } from "lucide-react";
+import { ChevronDown, ChevronUp, CircleX, Funnel, Trash2 } from "lucide-react";
 import "@/styles/GlobalFilters.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useFilterStore, type PassFilterState } from "../stores/filtersStore";
+import { useDebouncedCallback } from "@tanstack/react-pacer/debouncer";
 
 export default function PassFilters() {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const { filters, setFilters } = usePassEventsFilterStore();
-  const { register, handleSubmit, reset, control } = useForm<PassFilterState>({
+  const { passEventFilters, setPassEventFilters } = useFilterStore();
+  const { register, reset, watch, control } = useForm<PassFilterState>({
     defaultValues: {
       minVisibleDuration: "0",
       minVisibleElevation: "0",
-      ...filters,
+      ...passEventFilters,
       browserLocalTzOffsetMinutes: String(new Date().getTimezoneOffset()),
     },
   });
@@ -28,28 +26,42 @@ export default function PassFilters() {
     append({ minTime: "00:00", maxTime: "00:00", dows: "" });
   };
 
-  const onSubmit = (data: PassFilterState) => {
-    const cleanedData = {
-      ...data,
-    };
-    setFilters(cleanedData);
-  };
+  // take care of auto-saving with debounce
+  const debouncedSave = useDebouncedCallback(
+    (data: PassFilterState) => {
+      setPassEventFilters(data);
+    },
+    {
+      wait: 500,
+    }
+  );
 
-  const hasActiveFilters = Object.values(filters).some(
+  useEffect(() => {
+    const subscription = watch((value) => {
+      debouncedSave(value as PassFilterState);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, debouncedSave]);
+  //\auto-save
+
+  const hasActiveFilters = Object.values(passEventFilters).some(
     (value) => value !== undefined && value !== ""
   );
 
   // Generate summary string
   let summary = "";
   const parts = [];
-  if (parseInt(filters.minVisibleElevation || "0") > 0) {
-    parts.push(`+${filters.minVisibleElevation}°`);
+  if (parseInt(passEventFilters.minVisibleElevation || "0") > 0) {
+    parts.push(`+${passEventFilters.minVisibleElevation}°`);
   }
-  if (parseInt(filters.minVisibleDuration || "0") > 0) {
-    parts.push(`+${filters.minVisibleDuration}s`);
+  if (parseInt(passEventFilters.minVisibleDuration || "0") > 0) {
+    parts.push(`+${passEventFilters.minVisibleDuration}s`);
   }
-  if (filters.timingFilters && filters.timingFilters.length > 0) {
-    for (const f of filters.timingFilters) {
+  if (
+    passEventFilters.timingFilters &&
+    passEventFilters.timingFilters.length > 0
+  ) {
+    for (const f of passEventFilters.timingFilters) {
       let strTiming = "";
       if (f.dows) strTiming += `${f.dows}: `;
       if (f.minTime && f.maxTime) {
@@ -65,7 +77,7 @@ export default function PassFilters() {
   summary = parts.join(", ");
 
   return (
-    <form className="pass-filters" onSubmit={handleSubmit(onSubmit)}>
+    <form className="pass-filters">
       <h3 onClick={() => setIsCollapsed(!isCollapsed)}>
         <span>
           <Funnel /> Pass Filters
@@ -95,13 +107,6 @@ export default function PassFilters() {
             placeholder="e.g., 300"
           />
         </div>
-        <div className="form-group">
-          {/* sorry for the ugly hack :) */}
-          <label>&nbsp;</label>
-          <button type="submit">
-            <Check /> Apply Filters
-          </button>
-        </div>
         {hasActiveFilters && (
           <div className="form-group">
             <label>&nbsp;</label>
@@ -109,7 +114,7 @@ export default function PassFilters() {
               type="reset"
               onClick={() => {
                 reset();
-                setFilters({});
+                setPassEventFilters({});
               }}
             >
               <CircleX /> Clear
@@ -122,8 +127,8 @@ export default function PassFilters() {
           isCollapsed ? "collapsed" : ""
         }`}
       >
-        <fieldset>
-          <legend>Timing Filters (OR)</legend>
+        <div className="multiple-container">
+          <h4>Timing Filters (OR)</h4>
           {fields.map((field, index) => (
             <div key={field.id} className="timing-row">
               <input
@@ -149,7 +154,7 @@ export default function PassFilters() {
                 className="delete-btn"
                 title="Remove filter"
               >
-                Remove
+                <Trash2 size={16} />
               </button>
             </div>
           ))}
@@ -160,7 +165,7 @@ export default function PassFilters() {
           >
             Add Timing Filter
           </button>
-        </fieldset>
+        </div>
       </div>
     </form>
   );
