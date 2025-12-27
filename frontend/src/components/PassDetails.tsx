@@ -72,11 +72,7 @@ export default function PassDetails() {
     const targetPoints = 100; // Aim for ~100 points per pass
     const rawStepMs = durationMs / targetPoints;
     const minStepMs = 1000; // at most 1 Hz sampling
-    const maxStepMs = 120_000; // at most 120 s between samples
-    const stepMs = Math.min(
-      maxStepMs,
-      Math.max(minStepMs, Math.floor(rawStepMs))
-    );
+    const stepMs = Math.max(minStepMs, Math.floor(rawStepMs));
 
     for (let time = startTime; time <= endTime; time += stepMs) {
       const result = calculateAngle({
