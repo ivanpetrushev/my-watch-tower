@@ -61,6 +61,7 @@ model GroundStation {
   latitude  Float
   longitude Float
   altitude  Float // in meters
+  isDefault Boolean @default(false)
 
   horizonmask String // base64 encoded 360x90 grid of bytes, each byte representing 1 degree of azimuth, each bit representing 1 degree of elevation
 

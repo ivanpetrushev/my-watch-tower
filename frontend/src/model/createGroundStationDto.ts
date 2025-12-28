@@ -12,4 +12,5 @@ export interface CreateGroundStationDto {
   longitude: number;
   altitude: number;
   horizonmask: string;
+  isDefault: boolean;
 }

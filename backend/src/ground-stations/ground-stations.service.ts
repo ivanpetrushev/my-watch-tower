@@ -14,6 +14,10 @@ export class GroundStationsService {
   ) {}
 
   async create(data: CreateGroundStationDto): Promise<GroundStation> {
+    if (data.isDefault) {
+      await this.resetDefaultStations();
+    }
+
     const createdStation = await this.prisma.groundStation.create({
       data,
     });
@@ -50,6 +54,10 @@ export class GroundStationsService {
       throw new NotFoundException('Ground station not found');
     }
 
+    if (data.isDefault) {
+      await this.resetDefaultStations();
+    }
+
     // refresh passes for this ground station
     await this.prisma.passEvent.deleteMany({
       where: { groundStationId: id },
@@ -80,6 +88,13 @@ export class GroundStationsService {
 
     return await this.prisma.groundStation.delete({
       where: { id },
+    });
+  }
+
+  async resetDefaultStations() {
+    await this.prisma.groundStation.updateMany({
+      where: { isDefault: true },
+      data: { isDefault: false },
     });
   }
 }

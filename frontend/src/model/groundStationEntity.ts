@@ -13,6 +13,7 @@ export interface GroundStationEntity {
   longitude: number;
   altitude: number;
   horizonmask: string;
+  isDefault: boolean;
   createdAt: string;
   updatedAt: string;
 }

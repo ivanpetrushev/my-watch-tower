@@ -21,6 +21,7 @@
     padding: 1rem;
     transition: border-color 150ms ease, box-shadow 150ms ease;
     display: flex;
+    justify-content: space-between;
     gap: 1rem;
     &:hover {
       border-color: var(--primary-color);

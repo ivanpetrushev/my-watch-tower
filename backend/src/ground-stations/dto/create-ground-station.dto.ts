@@ -11,4 +11,6 @@ export class CreateGroundStationDto {
   altitude: number;
   @ApiProperty()
   horizonmask: string;
+  @ApiProperty()
+  isDefault: boolean;
 }

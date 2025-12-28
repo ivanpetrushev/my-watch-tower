@@ -128,6 +128,7 @@ export const GroundStationScalarFieldEnum = {
   latitude: 'latitude',
   longitude: 'longitude',
   altitude: 'altitude',
+  isDefault: 'isDefault',
   horizonmask: 'horizonmask',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

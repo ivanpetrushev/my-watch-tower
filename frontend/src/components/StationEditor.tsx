@@ -13,6 +13,7 @@ type StationFormValues = {
   latitude: number;
   longitude: number;
   altitude: number;
+  isDefault: boolean;
   // no mask here
 };
 
@@ -39,6 +40,7 @@ export default function StationEditor({ mode }: { mode: "create" | "edit" }) {
         latitude: data.latitude,
         longitude: data.longitude,
         altitude: data.altitude,
+        isDefault: data.isDefault,
       });
       // setHorizonMask(data.horizonmask || "");
     }
@@ -112,6 +114,12 @@ export default function StationEditor({ mode }: { mode: "create" | "edit" }) {
                   step="any"
                   {...register("altitude", { valueAsNumber: true })}
                 />
+              </label>
+            </div>
+            <div>
+              <label>
+                <div>Set as default:</div>
+                <input type="checkbox" {...register("isDefault")} />
               </label>
             </div>
           </div>

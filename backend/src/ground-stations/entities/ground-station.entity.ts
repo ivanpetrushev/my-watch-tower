@@ -15,6 +15,8 @@ export class GroundStationEntity implements GroundStation {
   @ApiProperty()
   horizonmask: string;
   @ApiProperty()
+  isDefault: boolean;
+  @ApiProperty()
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;

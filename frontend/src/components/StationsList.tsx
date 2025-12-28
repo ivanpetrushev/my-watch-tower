@@ -22,6 +22,7 @@ export default function StationsList() {
             <Link key={station.id} to={`/stations/${station.id}/edit`}>
               <div className="station-card">
                 {station.name} - ({station.latitude}, {station.longitude})
+                {station.isDefault && <strong>Default</strong>}
               </div>
             </Link>
           ))}
