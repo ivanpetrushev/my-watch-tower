@@ -39,12 +39,12 @@ export default function PassEventCard({ item }: { item: PassEventEntity }) {
   return (
     <div className="pass-event-card">
       <div className="header">
-        <div className="aos">
+        <div className="aos" style={{ textAlign: "left" }}>
           <Sunrise />
           {formatDate(item.aos)}
         </div>
         <h3>{item.satellite.name}</h3>
-        <div className="los">
+        <div className="los" style={{ textAlign: "right" }}>
           {formatDate(item.los)} <Sunset />
         </div>
       </div>
