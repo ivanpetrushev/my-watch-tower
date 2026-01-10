@@ -151,6 +151,14 @@ select {
   &:focus {
     border-color: var(--primary-color);
   }
+  &:disabled {
+    opacity: 0.5;
+    border-color: var(--form-fields-background-color);
+    &:hover {
+      border-color: var(--form-fields-background-color);
+      color: var(--form-fields-text-color);
+    }
+  }
 }
 button {
   cursor: pointer;

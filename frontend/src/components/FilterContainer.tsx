@@ -55,14 +55,18 @@ export default function FilterContainer({
       (preset) => preset.id.toString() === presetId
     );
     if (selectedPreset) {
-      const satelliteFilter = JSON.parse(
-        selectedPreset.satelliteFilter || "{}"
-      );
-      const passEventFilter = JSON.parse(
-        selectedPreset.passEventFilter || "{}"
-      );
-      setSatelliteFilters(satelliteFilter);
-      setPassEventFilters(passEventFilter);
+      try {
+        const satelliteFilter = JSON.parse(
+          selectedPreset.satelliteFilter || "{}"
+        );
+        const passEventFilter = JSON.parse(
+          selectedPreset.passEventFilter || "{}"
+        );
+        setSatelliteFilters(satelliteFilter);
+        setPassEventFilters(passEventFilter);
+      } catch (error) {
+        console.error("Error parsing preset filters:", error);
+      }
     }
   };
 
@@ -99,7 +103,11 @@ export default function FilterContainer({
           value={presetName}
           onChange={(e) => setPresetName(e.target.value)}
         />
-        <button type="submit" onClick={onSavePreset}>
+        <button
+          type="button"
+          disabled={!presetName.trim()}
+          onClick={onSavePreset}
+        >
           Save preset
         </button>
       </div>
