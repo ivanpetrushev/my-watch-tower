@@ -149,7 +149,7 @@ export default function Timeline() {
   }, [beginTime, windowHours]);
   // const { filters } = useSatelliteFilterStore();
   // const { filters: passEventFilters } = usePassEventsFilterStore();
-  const {satelliteFilters, passEventFilters} = useFilterStore();
+  const { satelliteFilters, passEventFilters } = useFilterStore();
   const { data: groundStations } = useGetAllGroundStations();
   const { currentGroundStationId } = useCurrentGroundStationStore();
 
@@ -235,7 +235,7 @@ export default function Timeline() {
         <p>Please select a ground station (above).</p>
       )}
       <p>All times are local times to browser.</p>
-      <FilterContainer satelliteFilters={true} passFilters={true} />
+      <FilterContainer showSatelliteFilters={true} showPassFilters={true} />
       {error && <p>Error loading pass events: {String(error)}</p>}
       <div className="controls">
         <div className="begin-time">

@@ -40,13 +40,9 @@ interface FilterStore {
   // applyAll: () => void;
 
   loadPreset: (preset: FilterPresetEntity) => void;
-  getCurrentAsPreset: () => {
-    satelliteFilter: string;
-    passEventFilter: string;
-  };
 }
 
-export const useFilterStore = create<FilterStore>()((set, get) => ({
+export const useFilterStore = create<FilterStore>()((set) => ({
   satelliteFilters: {},
   passEventFilters: {},
 
@@ -83,12 +79,4 @@ export const useFilterStore = create<FilterStore>()((set, get) => ({
       satelliteFilters: JSON.parse(preset.satelliteFilter),
       passEventFilters: JSON.parse(preset.passEventFilter),
     }),
-
-  getCurrentAsPreset: () => {
-    const state = get();
-    return {
-      satelliteFilter: JSON.stringify(state.satelliteFilters),
-      passEventFilter: JSON.stringify(state.passEventFilters),
-    };
-  },
 }));

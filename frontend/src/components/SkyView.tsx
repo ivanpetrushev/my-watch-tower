@@ -206,7 +206,7 @@ export default function SkyView() {
       </h2>
       {!groundStation && <p>Please select a ground station (above).</p>}
       <p>All times are local times to browser.</p>
-      <FilterContainer satelliteFilters={true} passFilters={true} />
+      <FilterContainer showSatelliteFilters={true} showPassFilters={true} />
       <SkyViewTimeControls />
       {groundStation && (
         <div className="canvas-container">

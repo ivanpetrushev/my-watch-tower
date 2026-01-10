@@ -50,7 +50,7 @@ export default function PassEvents() {
         <p>Please select a ground station (above).</p>
       )}
       <p>All times are local times to browser.</p>
-      <FilterContainer satelliteFilters={true} passFilters={true} />
+      <FilterContainer showSatelliteFilters={true} showPassFilters={true} />
       {error && <p>Error loading pass events: {String(error)}</p>}
       {data && data.items.length > 0 && (
         <>

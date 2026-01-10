@@ -117,3 +117,14 @@
     }
   }
 }
+
+.filter-preset-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-direction: column;
+  @include md {
+    flex-direction: row;
+  }
+}
