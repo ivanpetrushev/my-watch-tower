@@ -10,6 +10,7 @@ import PassEventCard from "./PassEventCard";
 import { Link } from "react-router-dom";
 import FilterContainer from "./FilterContainer";
 import { useFilterStore } from "../stores/filtersStore";
+import FirstRunWarnings from "./FirstRunWarnings";
 
 const calculateXPosition = (
   eventTime: string,
@@ -237,6 +238,7 @@ export default function Timeline() {
       <p>All times are local times to browser.</p>
       <FilterContainer showSatelliteFilters={true} showPassFilters={true} />
       {error && <p>Error loading pass events: {String(error)}</p>}
+      <FirstRunWarnings />
       <div className="controls">
         <div className="begin-time">
           Start: {formatDate(beginTime.toISOString())}

@@ -8,6 +8,7 @@ import { useGetAllGroundStations } from "../api/generated/ground-stations/ground
 import { Link } from "react-router-dom";
 import FilterContainer from "./FilterContainer";
 import { useFilterStore } from "../stores/filtersStore";
+import FirstRunWarnings from "./FirstRunWarnings";
 
 export default function PassEvents() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -77,6 +78,7 @@ export default function PassEvents() {
       {!currentGroundStationId && (
         <h2>Please select a ground station to view pass events.</h2>
       )}
+      <FirstRunWarnings />
     </div>
   );
 }

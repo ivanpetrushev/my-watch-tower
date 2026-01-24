@@ -10,6 +10,7 @@ import { calculateAngle } from "./helpers";
 import HorizonCanvas from "./HorizonCanvas";
 import FilterContainer from "./FilterContainer";
 import { useFilterStore } from "../stores/filtersStore";
+import FirstRunWarnings from "./FirstRunWarnings";
 
 const PADDING = 1 * 60 * 60 * 1000;
 const CACHE_WINDOW = 4 * 60 * 60 * 1000;
@@ -207,6 +208,7 @@ export default function SkyView() {
       {!groundStation && <p>Please select a ground station (above).</p>}
       <p>All times are local times to browser.</p>
       <FilterContainer showSatelliteFilters={true} showPassFilters={true} />
+      <FirstRunWarnings />
       <SkyViewTimeControls />
       {groundStation && (
         <div className="canvas-container">
