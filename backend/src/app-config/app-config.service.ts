@@ -17,4 +17,8 @@ export class AppConfigService {
       create: { key, value, isSystem },
     });
   }
+
+  async findOne(key: string) {
+    return this.prisma.appConfig.findUnique({ where: { key } });
+  }
 }

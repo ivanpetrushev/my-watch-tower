@@ -21,6 +21,7 @@ import { GroundStationsController } from './ground-stations/ground-stations.cont
 import { GroundStationsService } from './ground-stations/ground-stations.service';
 import { FilterPresetsController } from './filter-presets/filter-presets.controller';
 import { FilterPresetsService } from './filter-presets/filter-presets.service';
+import { AppConfigController } from './app-config/app-config.controller';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { FilterPresetsService } from './filter-presets/filter-presets.service';
     PassEventsController,
     GroundStationsController,
     FilterPresetsController,
+    AppConfigController,
   ],
   providers: [
     AppService,
