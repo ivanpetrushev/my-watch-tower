@@ -9,6 +9,7 @@ import SatelliteList from "./components/SatelliteList";
 import PassDetails from "./components/PassDetails";
 import Timeline from "./components/Timeline";
 import SkyView from "./components/SkyView";
+import FilterPresetList from "./components/FilterPresetList";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/pass-events/:id" element={<PassDetails />} />
           <Route path="/timeline" element={<Timeline />} />
           <Route path="/sky-view" element={<SkyView />} />
+          <Route path="/filter-presets" element={<FilterPresetList />} />
         </Routes>
       </Layout>
     </BrowserRouter>

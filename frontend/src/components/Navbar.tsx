@@ -1,4 +1,4 @@
-import { Calendar, Clock, MapPinHouse, Satellite, Target } from "lucide-react";
+import { Calendar, Clock, Funnel, MapPinHouse, Satellite, Target } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useGetSatellites } from "../api/generated/satellites/satellites";
 
@@ -30,6 +30,12 @@ export default function Navbar() {
             <NavLink to="/stations">
               <MapPinHouse />{" "}
               <span className="only-above-md">Ground Stations</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/filter-presets">
+              <Funnel />{" "}
+              <span className="only-above-md">Filter Presets</span>
             </NavLink>
           </li>
         </ul>
