@@ -8,9 +8,15 @@ export default function FirstRunWarnings() {
   const { data: satellites } = useGetSatellites({
     tracked: "true",
   });
+  const noGroundStations = groundStations && groundStations.length === 0;
+  const noTrackedSatellites = satellites && satellites.total === 0;
+
+  if (!noGroundStations && !noTrackedSatellites) {
+    return null;
+  }
   return (
     <div className="first-run-warnings">
-      {groundStations && groundStations.length === 0 && (
+      {noGroundStations && (
         <div className="warning-box">
           <h3>Add Your First Ground Station</h3>
           <p>
@@ -20,7 +26,7 @@ export default function FirstRunWarnings() {
           </p>
         </div>
       )}
-      {satellites && satellites.total === 0 && (
+      {noTrackedSatellites && (
         <div className="warning-box">
           <h3>Start Tracking Satellites</h3>
           <p>

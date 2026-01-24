@@ -52,6 +52,7 @@ export default function PassEvents() {
       )}
       <p>All times are local times to browser.</p>
       <FilterContainer showSatelliteFilters={true} showPassFilters={true} />
+      <FirstRunWarnings />
       {error && <p>Error loading pass events: {String(error)}</p>}
       {data && data.items.length > 0 && (
         <>
@@ -78,7 +79,6 @@ export default function PassEvents() {
       {!currentGroundStationId && (
         <h2>Please select a ground station to view pass events.</h2>
       )}
-      <FirstRunWarnings />
     </div>
   );
 }
