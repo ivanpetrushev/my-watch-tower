@@ -13,9 +13,11 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function FilterContainer({
   showSatelliteFilters,
   showPassFilters,
+  showPresetOptions,
 }: {
   showSatelliteFilters?: boolean;
   showPassFilters?: boolean;
+  showPresetOptions?: boolean;
 }) {
   const [presetName, setPresetName] = useState("");
   const queryClient = useQueryClient();
@@ -24,8 +26,7 @@ export default function FilterContainer({
   const {
     satelliteFilters,
     passEventFilters,
-    setSatelliteFilters,
-    setPassEventFilters,
+    loadPreset,
   } = useFilterStore();
 
   const onSavePreset = () => {
@@ -55,18 +56,7 @@ export default function FilterContainer({
       (preset) => preset.id.toString() === presetId
     );
     if (selectedPreset) {
-      try {
-        const satelliteFilter = JSON.parse(
-          selectedPreset.satelliteFilter || "{}"
-        );
-        const passEventFilter = JSON.parse(
-          selectedPreset.passEventFilter || "{}"
-        );
-        setSatelliteFilters(satelliteFilter);
-        setPassEventFilters(passEventFilter);
-      } catch (error) {
-        console.error("Error parsing preset filters:", error);
-      }
+      loadPreset(selectedPreset);
     }
   };
 
@@ -74,43 +64,45 @@ export default function FilterContainer({
     <div className="filter-container">
       {showSatelliteFilters && <SatelliteFilters />}
       {showPassFilters && <PassFilters />}
-      <div className="filter-preset-form">
-        <h3>Filter Presets</h3>
-        <select
-          value={
-            filterPresetsData && filterPresetsData.length > 0 ? "ask" : "no"
-          }
-          onChange={(e) => onSelectPreset(e.target.value)}
-        >
-          <option disabled value="ask">
-            Load preset
-          </option>
-          {filterPresetsData && filterPresetsData.length > 0 ? (
-            filterPresetsData.map((preset) => (
-              <option key={preset.id} value={preset.id}>
-                {preset.name}
-              </option>
-            ))
-          ) : (
-            <option disabled value="no">
-              No presets saved
+      {showPresetOptions && (
+        <div className="filter-preset-form">
+          <h3>Filter Presets</h3>
+          <select
+            value={
+              filterPresetsData && filterPresetsData.length > 0 ? "ask" : "no"
+            }
+            onChange={(e) => onSelectPreset(e.target.value)}
+          >
+            <option disabled value="ask">
+              Load preset
             </option>
-          )}
-        </select>
-        <input
-          type="text"
-          placeholder="Save as..."
-          value={presetName}
-          onChange={(e) => setPresetName(e.target.value)}
-        />
-        <button
-          type="button"
-          disabled={!presetName.trim()}
-          onClick={onSavePreset}
-        >
-          Save preset
-        </button>
-      </div>
+            {filterPresetsData && filterPresetsData.length > 0 ? (
+              filterPresetsData.map((preset) => (
+                <option key={preset.id} value={preset.id}>
+                  {preset.name}
+                </option>
+              ))
+            ) : (
+              <option disabled value="no">
+                No presets saved
+              </option>
+            )}
+          </select>
+          <input
+            type="text"
+            placeholder="Save as..."
+            value={presetName}
+            onChange={(e) => setPresetName(e.target.value)}
+          />
+          <button
+            type="button"
+            disabled={!presetName.trim()}
+            onClick={onSavePreset}
+          >
+            Save preset
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -236,7 +236,11 @@ export default function Timeline() {
         <p>Please select a ground station (above).</p>
       )}
       <p>All times are local times to browser.</p>
-      <FilterContainer showSatelliteFilters={true} showPassFilters={true} />
+      <FilterContainer
+        showSatelliteFilters={true}
+        showPassFilters={true}
+        showPresetOptions={true}
+      />
       {error && <p>Error loading pass events: {String(error)}</p>}
       <FirstRunWarnings />
       <div className="controls">

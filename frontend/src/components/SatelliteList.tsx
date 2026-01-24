@@ -25,7 +25,7 @@ export default function SatelliteList() {
   return (
     <div>
       <h2>Satellites</h2>
-      <FilterContainer satelliteFilters={true} />
+      <FilterContainer showSatelliteFilters={true} showPresetOptions={true} />
       {/* {isLoading && <p>Loading satellites...</p>} */}
       {error && <p>Error loading satellites: {String(error)}</p>}
       {data && data.items.length > 0 && (

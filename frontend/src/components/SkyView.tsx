@@ -207,7 +207,11 @@ export default function SkyView() {
       </h2>
       {!groundStation && <p>Please select a ground station (above).</p>}
       <p>All times are local times to browser.</p>
-      <FilterContainer showSatelliteFilters={true} showPassFilters={true} />
+      <FilterContainer
+        showSatelliteFilters={true}
+        showPassFilters={true}
+        showPresetOptions={true}
+      />
       <FirstRunWarnings />
       <SkyViewTimeControls />
       {groundStation && (
