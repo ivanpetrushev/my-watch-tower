@@ -12,21 +12,21 @@ export default function FirstRunWarnings() {
     <div className="first-run-warnings">
       {groundStations && groundStations.length === 0 && (
         <div className="warning-box">
-          <h3>No Ground Stations Found!</h3>
+          <h3>Add Your First Ground Station</h3>
           <p>
             It looks like you haven't added any ground stations yet. Please{" "}
-            <Link to="/stations/new">add</Link> at least one ground station to
-            start tracking satellite passes.
+            <Link to="/stations/new">add a ground station</Link> to start
+            tracking satellite passes.
           </p>
         </div>
       )}
       {satellites && satellites.total === 0 && (
         <div className="warning-box">
-          <h3>No Tracked Satellites Found!</h3>
+          <h3>Start Tracking Satellites</h3>
           <p>
             It looks like you haven't marked any satellites as tracked yet.
-            Please <Link to="/satellite-list">mark</Link> at least one satellite
-            as tracked to start receiving pass notifications.
+            Please <Link to="/satellite-list">track satellites</Link> to start
+            receiving pass notifications.
           </p>
         </div>
       )}
