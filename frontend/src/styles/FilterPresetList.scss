@@ -30,4 +30,18 @@
       gap: 0.5rem;
     }
   }
+
+  .save-public-address {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-direction: column;
+    @include md {
+      flex-direction: row;
+    }
+  }
+
+  a {
+    color: var(--primary-color);
+  }
 }

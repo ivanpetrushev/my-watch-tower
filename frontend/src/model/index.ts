@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
+export * from './appConfigEntity';
 export * from './createFilterPresetDto';
 export * from './createGroundStationDto';
 export * from './filterPresetEntity';
@@ -17,6 +18,7 @@ export * from './passEventEntity';
 export * from './passEventEntityResponse';
 export * from './satelliteEntity';
 export * from './satelliteEntityResponse';
+export * from './saveAppConfigDto';
 export * from './setTagsDto';
 export * from './tagEntity';
 export * from './tagEntityColor';
