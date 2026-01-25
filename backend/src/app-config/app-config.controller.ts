@@ -36,17 +36,13 @@ export class AppConfigController {
   @Patch(':key')
   @ApiOperation({ operationId: 'setAppConfigValue' })
   @ApiOkResponse({ type: AppConfigEntity })
-  @ApiNotFoundResponse()
   @ApiBadRequestResponse()
   async setConfigValue(
     @Param('key') key: string,
     @Body() data: SaveAppConfigDto,
   ) {
     const configItem = await this.appConfigService.findOne(key);
-    if (!configItem) {
-      throw new NotFoundException('Config item not found');
-    }
-    if (configItem.isSystem) {
+    if (configItem?.isSystem) {
       throw new BadRequestException('Cannot modify system config item');
     }
     const config = await this.appConfigService.set(key, data.value);

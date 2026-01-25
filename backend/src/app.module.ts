@@ -22,6 +22,8 @@ import { GroundStationsService } from './ground-stations/ground-stations.service
 import { FilterPresetsController } from './filter-presets/filter-presets.controller';
 import { FilterPresetsService } from './filter-presets/filter-presets.service';
 import { AppConfigController } from './app-config/app-config.controller';
+import { CalendarController } from './calendar/calendar.controller';
+import { CalendarService } from './calendar/calendar.service';
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import { AppConfigController } from './app-config/app-config.controller';
     GroundStationsController,
     FilterPresetsController,
     AppConfigController,
+    CalendarController,
   ],
   providers: [
     AppService,
@@ -60,6 +63,7 @@ import { AppConfigController } from './app-config/app-config.controller';
     PredictorConsumer,
     GroundStationsService,
     FilterPresetsService,
+    CalendarService,
   ],
 })
 export class AppModule {}
