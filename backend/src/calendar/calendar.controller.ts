@@ -19,12 +19,14 @@ export class CalendarController {
   async getIcs(
     @Param('presetId') presetId: string,
     @Param('stationId') stationId: string,
+    @Res() res: Response,
   ) {
     const icsData = await this.calendarService.generateICSFile(
       +stationId,
       +presetId,
     );
-    return icsData;
+    res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
+    res.send(icsData);
   }
 
   // for downloading in browser

@@ -189,6 +189,10 @@ Server connection is pre-configured in `docker-confs/pgadmin-servers.json`.
 
 ---
 
+## Calendar Integration
+
+TODO
+
 ## Roadmap & TODOs
 
 ### High Priority

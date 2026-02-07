@@ -105,7 +105,7 @@ export default function FilterPresetList() {
         Configure your public server address to enable calendar subscriptions
         from external services (like Google Calendar). For details, see the{" "}
         <a
-          href="https://github.com/ivanpetrushev/my-watch-tower/blob/master/README.md#todo-insert-correct-section"
+          href="https://github.com/ivanpetrushev/my-watch-tower/blob/master/README.md#calendar-integration"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -150,7 +150,7 @@ export default function FilterPresetList() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                ICal Link
+                iCal Link
               </a>
               <button onClick={() => handleDelete(preset.id)}>Delete</button>
             </div>

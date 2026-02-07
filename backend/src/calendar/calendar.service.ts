@@ -59,13 +59,6 @@ export class CalendarService {
       );
     }
 
-    console.log(
-      `satelliteFilters: ${JSON.stringify(satelliteFilters, null, 2)}`,
-    );
-    console.log(
-      `passEventFilters: ${JSON.stringify(passEventFilters, null, 2)}`,
-    );
-
     // page through all pass events matching the preset and station
     let allEvents: PassEventWithSatellite[] = [];
     let page = 1;
@@ -92,11 +85,8 @@ export class CalendarService {
       page += 1;
     }
 
-    console.log(`items ${allEvents.length}`);
-    console.log(JSON.stringify(allEvents[0], null, 2));
-
     // generate ics data
-    const x = createEvents(
+    const icsData = createEvents(
       allEvents.map((pe) => {
         const startDate = new Date(pe.aos);
         const endDate = new Date(pe.los);
@@ -136,6 +126,6 @@ export class CalendarService {
         calName: `${station.name} / ${preset.name}`,
       },
     );
-    return x?.value || '';
+    return icsData?.value || '';
   }
 }
