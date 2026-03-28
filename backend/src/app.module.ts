@@ -30,8 +30,8 @@ import { CalendarService } from './calendar/calendar.service';
     ConfigModule.forRoot({ isGlobal: true }),
     BullModule.forRoot({
       connection: {
-        host: 'localhost',
-        port: 6379,
+        host: process.env.REDIS_HOST || 'localhost',
+        port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379,
       },
     }),
     BullModule.registerQueue({
@@ -66,4 +66,4 @@ import { CalendarService } from './calendar/calendar.service';
     CalendarService,
   ],
 })
-export class AppModule {}
+export class AppModule { }

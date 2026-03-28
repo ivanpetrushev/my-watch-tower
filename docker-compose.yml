@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d my_watch_tower"]
+      test: [ "CMD-SHELL", "pg_isready -U admin -d my_watch_tower" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,7 +34,38 @@ services:
     restart: unless-stopped
     ports:
       - "6379:6379"
-
+  backend:
+    build:
+      context: ./backend
+    environment:
+      NODE_ENV: production
+    env_file: "./backend/.env"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: always
+  backend-migrate:
+    build:
+      context: ./backend
+    command: [ "sh", "-c", 'npx prisma migrate deploy' ]
+    env_file: "./backend/.env"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      VITE_BASE_URL: http://backend:3000/
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_started
 volumes:
   postgres_data:
     driver: local
