@@ -111,7 +111,7 @@ Traditional satellite tracking tools often fall short in these key areas:
 
 4. **Configure environment**
   
-   Copy `backend/.env.sample` to `backend/.env`, probably no need to adjust anything.
+   Copy `backend/.env.sample` to `backend/.env` and `frontend/.env.sample` to `frontend/.env`, probably no need to adjust anything.
 
 5. **Run database migrations**
 
@@ -256,6 +256,8 @@ Once the backend is running, access the interactive API documentation:
 
 ## Environment Variables
 
+No need to change this, if you are running the provided docker-compose.yml.
+
 ### Backend (`backend/.env`)
 
 ```env
@@ -263,12 +265,13 @@ Once the backend is running, access the interactive API documentation:
 DATABASE_URL="postgresql://admin:admin123@localhost:5432/my_watch_tower"
 REDIS_HOST=localhost
 REDIS_PORT=6379
-
-# Frontend
-VITE_BASE_URL=http://localhost:3000/
 ```
 
-No need to change this, if you are running the provided docker-compose.yml.
+### Frontend (`frontend/.env`)
+
+```env
+VITE_BASE_API_URL=http://localhost:3000/
+```
 
 ---
 

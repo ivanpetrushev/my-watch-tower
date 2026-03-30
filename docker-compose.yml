@@ -62,8 +62,7 @@ services:
     image: my-watch-tower-frontend:latest
     build:
       context: ./frontend
-    environment:
-      VITE_BASE_URL: http://backend:3000/
+    env_file: "./frontend/.env"
     ports:
       - "5173:5173"
     depends_on:
