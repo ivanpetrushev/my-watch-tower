@@ -21,7 +21,3 @@ export const customInstance = <T>(
 export type ErrorType<Error> = AxiosError<Error>;
 
 export type BodyType<BodyData> = BodyData;
-
-// // Or, in case you want to wrap the body type (optional)
-// // (if the custom instance is processing data before sending it, like changing the case for example)
-// export type BodyType<BodyData> = CamelCase<BodyData>;

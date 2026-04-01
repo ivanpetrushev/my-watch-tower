@@ -66,4 +66,4 @@ import { CalendarService } from './calendar/calendar.service';
     CalendarService,
   ],
 })
-export class AppModule { }
+export class AppModule {}
