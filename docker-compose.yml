@@ -41,8 +41,8 @@ services:
     environment:
       NODE_ENV: production
     env_file: "./backend/.env"
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -62,10 +62,22 @@ services:
     image: my-watch-tower-frontend:latest
     build:
       context: ./frontend
-    env_file: "./frontend/.env"
-    ports:
-      - "5173:5173"
+    # env_file: "./frontend/.env"
+    # ports:
+    #   - "5173:5173"
     depends_on:
+      backend:
+        condition: service_started
+  nginx:
+    image: nginx:1.28
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker-confs/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      frontend:
+        condition: service_started
       backend:
         condition: service_started
 volumes:

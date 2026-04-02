@@ -339,9 +339,7 @@ REDIS_PORT=6379
 
 ### Frontend (`frontend/.env`)
 
-```env
-VITE_BASE_API_URL=http://localhost:3000/
-```
+(No .env variables, as getting ENV to work in Vite + Docker is a bit tricky)
 
 ---
 

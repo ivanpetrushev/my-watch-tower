@@ -1,7 +1,7 @@
 import Axios, { AxiosError, type AxiosRequestConfig } from "axios";
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: import.meta.env.VITE_BASE_API_URL || `http://${window.location.hostname}:3000`,
+  baseURL: `http://${window.location.hostname}/api`,
 });
 
 // add a second `options` argument here if you want to pass extra options to each generated query
