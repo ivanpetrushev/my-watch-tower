@@ -1,7 +1,7 @@
 import Axios, { AxiosError, type AxiosRequestConfig } from "axios";
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: `http://${window.location.hostname}/api`,
+  baseURL: "/api",
 });
 
 // add a second `options` argument here if you want to pass extra options to each generated query
