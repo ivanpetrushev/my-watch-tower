@@ -18,7 +18,7 @@ async function bootstrap() {
     .addTag('satellites')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+  SwaggerModule.setup('swagger', app, documentFactory);
 
   app.enableCors();
 
