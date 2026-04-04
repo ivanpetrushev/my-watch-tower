@@ -4,6 +4,8 @@
 
 A satellite tracking application that provides pass predictions for multiple ground stations with real-world visibility calculations based on actual horizon obstacles.
 
+If you are here just to run the project, refer to the [Quick Start (deployment)](#quick-start-deployment) section below.
+
 ---
 
 ## Why This Project?
@@ -74,7 +76,7 @@ Traditional satellite tracking tools often fall short in these key areas:
 
 ---
 
-## Quick Start
+## Quick Start (development)
 
 **Note:** This guide assumes a development environment setup. Proper docker images for non-developer audience coming soon.
 
@@ -188,23 +190,28 @@ Server connection is pre-configured in `docker-confs/pgadmin-servers.json`.
 
 ---
 
-## Docker Compose support
+## Quick start (deployment)
 
-Used for deployment. Refer to [Quick Start](#quick-start) for local dev setup.
+Docker Compose is used for easy deployment. Refer to [Quick Start (development)](#quick-start-development) for local dev setup.
 
 1. **Start the containers**
 
-2.1. Run `docker compose up -d` to run all the services - backend, frontend, Redis, PostgreSQL, pgAdmin (optional), nginx.
-Migrations will be applied automatically via the `backend-migrate` service.
+   Run `docker compose up -d` to run all the services - backend, frontend, Redis, PostgreSQL, pgAdmin (optional), nginx.
+   Migrations will be applied automatically via the `backend-migrate` service.
 
-2.2. If you prefer to run the migrations manually, you can run the rest of the services separately.
+   If you prefer to run the migrations manually, you can run the rest of the services separately.
 
-```bash
-docker compose up -d redis postgres
-docker compose up backend-migrate
-docker compose up -d redis postgres backend frontend nginx
-```
+   ```bash
+   docker compose up -d redis postgres
+   docker compose up backend-migrate
+   docker compose up -d redis postgres backend frontend nginx
+   ```
 
+2. **Access the application**
+
+   - Frontend: http://localhost
+   - API Docs: http://localhost/api/swagger
+   - pgAdmin: http://localhost:8080 (admin@example.com / admin123)
 ---
 
 ## Calendar Integration
@@ -308,14 +315,6 @@ B) **Dynamic Subscription (Recommended)**
 - [ ] **CI/CD Pipeline**: GitHub Actions for testing and deployment
 - [ ] **Backup Strategy**: Automated database backups
 - [ ] **Performance Testing**: Load testing and optimization
-
----
-
-## API Documentation
-
-Once the backend is running, access the interactive API documentation:
-
-**Swagger UI**: http://localhost:3000/api/swagger
 
 ---
 
