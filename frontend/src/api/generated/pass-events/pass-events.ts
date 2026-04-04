@@ -41,7 +41,7 @@ export const getPassEventsByGroundStationId = (
       
       
       return customInstance<PassEventEntityResponse>(
-      {url: `/pass-events`, method: 'GET',
+      {url: `/api/pass-events`, method: 'GET',
         params, signal
     },
       options);
@@ -52,7 +52,7 @@ export const getPassEventsByGroundStationId = (
 
 export const getGetPassEventsByGroundStationIdQueryKey = (params?: GetPassEventsByGroundStationIdParams,) => {
     return [
-    `/pass-events`, ...(params ? [params]: [])
+    `/api/pass-events`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -128,7 +128,7 @@ export const comparePassEventsForCurrentOrbit = (
       
       
       return customInstance<PassEventEntity[]>(
-      {url: `/pass-events/${id}/compare`, method: 'GET', signal
+      {url: `/api/pass-events/${id}/compare`, method: 'GET', signal
     },
       options);
     }
@@ -138,7 +138,7 @@ export const comparePassEventsForCurrentOrbit = (
 
 export const getComparePassEventsForCurrentOrbitQueryKey = (id?: string,) => {
     return [
-    `/pass-events/${id}/compare`
+    `/api/pass-events/${id}/compare`
     ] as const;
     }
 
@@ -214,7 +214,7 @@ export const getPassEventById = (
       
       
       return customInstance<PassEventEntity>(
-      {url: `/pass-events/${id}`, method: 'GET', signal
+      {url: `/api/pass-events/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -224,7 +224,7 @@ export const getPassEventById = (
 
 export const getGetPassEventByIdQueryKey = (id?: string,) => {
     return [
-    `/pass-events/${id}`
+    `/api/pass-events/${id}`
     ] as const;
     }
 

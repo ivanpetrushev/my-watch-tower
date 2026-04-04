@@ -45,7 +45,7 @@ export const createFilterPreset = (
       
       
       return customInstance<FilterPresetEntity>(
-      {url: `/filter-presets`, method: 'POST',
+      {url: `/api/filter-presets`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createFilterPresetDto, signal
     },
@@ -103,7 +103,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
       
       return customInstance<FilterPresetEntity[]>(
-      {url: `/filter-presets`, method: 'GET', signal
+      {url: `/api/filter-presets`, method: 'GET', signal
     },
       options);
     }
@@ -113,7 +113,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 export const getListAllFilterPresetsQueryKey = () => {
     return [
-    `/filter-presets`
+    `/api/filter-presets`
     ] as const;
     }
 
@@ -189,7 +189,7 @@ export const updateFilterPreset = (
       
       
       return customInstance<FilterPresetEntity>(
-      {url: `/filter-presets/${id}`, method: 'PATCH',
+      {url: `/api/filter-presets/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateFilterPresetDto
     },
@@ -246,7 +246,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
       
       return customInstance<FilterPresetEntity>(
-      {url: `/filter-presets/${id}`, method: 'DELETE'
+      {url: `/api/filter-presets/${id}`, method: 'DELETE'
     },
       options);
     }

@@ -39,7 +39,7 @@ export const getTags = (
       
       
       return customInstance<TagEntity[]>(
-      {url: `/tags`, method: 'GET', signal
+      {url: `/api/tags`, method: 'GET', signal
     },
       options);
     }
@@ -49,7 +49,7 @@ export const getTags = (
 
 export const getGetTagsQueryKey = () => {
     return [
-    `/tags`
+    `/api/tags`
     ] as const;
     }
 

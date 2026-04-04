@@ -44,7 +44,7 @@ export const getAppConfigValue = (
       
       
       return customInstance<AppConfigEntity>(
-      {url: `/app-config/${key}`, method: 'GET', signal
+      {url: `/api/app-config/${key}`, method: 'GET', signal
     },
       options);
     }
@@ -54,7 +54,7 @@ export const getAppConfigValue = (
 
 export const getGetAppConfigValueQueryKey = (key?: string,) => {
     return [
-    `/app-config/${key}`
+    `/api/app-config/${key}`
     ] as const;
     }
 
@@ -130,7 +130,7 @@ export const setAppConfigValue = (
       
       
       return customInstance<AppConfigEntity>(
-      {url: `/app-config/${key}`, method: 'PATCH',
+      {url: `/api/app-config/${key}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: saveAppConfigDto
     },

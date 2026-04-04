@@ -47,7 +47,7 @@ export const trackSatellite = (
       
       
       return customInstance<SatelliteEntity>(
-      {url: `/satellites/${id}/track`, method: 'PATCH',
+      {url: `/api/satellites/${id}/track`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: trackSatelliteDto
     },
@@ -105,7 +105,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
       
       return customInstance<SatelliteEntity>(
-      {url: `/satellites/${id}/tags`, method: 'PATCH',
+      {url: `/api/satellites/${id}/tags`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: setTagsDto
     },
@@ -163,7 +163,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
       
       return customInstance<SatelliteEntityResponse>(
-      {url: `/satellites`, method: 'GET',
+      {url: `/api/satellites`, method: 'GET',
         params, signal
     },
       options);
@@ -174,7 +174,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 export const getGetSatellitesQueryKey = (params?: GetSatellitesParams,) => {
     return [
-    `/satellites`, ...(params ? [params]: [])
+    `/api/satellites`, ...(params ? [params]: [])
     ] as const;
     }
 

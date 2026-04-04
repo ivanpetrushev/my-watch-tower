@@ -45,7 +45,7 @@ export const createGroundStation = (
       
       
       return customInstance<GroundStationEntity>(
-      {url: `/ground-stations`, method: 'POST',
+      {url: `/api/ground-stations`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createGroundStationDto, signal
     },
@@ -103,7 +103,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
       
       return customInstance<GroundStationEntity[]>(
-      {url: `/ground-stations`, method: 'GET', signal
+      {url: `/api/ground-stations`, method: 'GET', signal
     },
       options);
     }
@@ -113,7 +113,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 export const getGetAllGroundStationsQueryKey = () => {
     return [
-    `/ground-stations`
+    `/api/ground-stations`
     ] as const;
     }
 
@@ -189,7 +189,7 @@ export const getGroundStationById = (
       
       
       return customInstance<GroundStationEntity>(
-      {url: `/ground-stations/${id}`, method: 'GET', signal
+      {url: `/api/ground-stations/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -199,7 +199,7 @@ export const getGroundStationById = (
 
 export const getGetGroundStationByIdQueryKey = (id?: string,) => {
     return [
-    `/ground-stations/${id}`
+    `/api/ground-stations/${id}`
     ] as const;
     }
 
@@ -275,7 +275,7 @@ export const updateGroundStation = (
       
       
       return customInstance<GroundStationEntity>(
-      {url: `/ground-stations/${id}`, method: 'PATCH',
+      {url: `/api/ground-stations/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateGroundStationDto
     },
@@ -332,7 +332,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
       
       return customInstance<GroundStationEntity>(
-      {url: `/ground-stations/${id}`, method: 'DELETE'
+      {url: `/api/ground-stations/${id}`, method: 'DELETE'
     },
       options);
     }
