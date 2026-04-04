@@ -29,7 +29,7 @@ export default defineConfig({
       },
     },
     input: {
-      target: 'http://localhost:3000/swagger-json',
+      target: 'http://localhost:3000/api/swagger-json',
     },
   },
 });

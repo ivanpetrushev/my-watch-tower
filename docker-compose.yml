@@ -40,9 +40,9 @@ services:
       context: ./backend
     environment:
       NODE_ENV: production
-    env_file: "./backend/.env"
-    ports:
-      - "3000:3000"
+    env_file: "./backend/.env.docker.sample"
+    # ports:
+    #   - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -54,7 +54,7 @@ services:
     build:
       context: ./backend
     command: [ "sh", "-c", 'npx prisma migrate deploy' ]
-    env_file: "./backend/.env"
+    env_file: "./backend/.env.docker.sample"
     depends_on:
       postgres:
         condition: service_healthy

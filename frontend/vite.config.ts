@@ -10,6 +10,12 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: true
+    allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        // rewrite: (path) => path.replace(/^\/api/, ''), // no need to rewrite right now, but might become handy in future
+      },
+    },
   }
 })

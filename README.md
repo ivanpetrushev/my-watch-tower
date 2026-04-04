@@ -207,7 +207,7 @@ Migrations will be applied automatically via the `backend-migrate` service.
 ```bash
 docker compose up -d redis postgres
 docker compose up backend-migrate
-docker compose up -d redis postgres backend frontend
+docker compose up -d redis postgres backend frontend nginx
 ```
 
 ---

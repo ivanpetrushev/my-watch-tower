@@ -10,6 +10,7 @@ BigInt.prototype['toJSON'] = function () {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('My Watch Tower API')
@@ -18,7 +19,9 @@ async function bootstrap() {
     .addTag('satellites')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, documentFactory);
+  SwaggerModule.setup('swagger', app, documentFactory, {
+    useGlobalPrefix: true,
+  });
 
   app.enableCors();
 
