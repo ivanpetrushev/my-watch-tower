@@ -35,7 +35,7 @@ services:
     ports:
       - "6379:6379"
   backend:
-    image: my-watch-tower-backend:latest
+    image: ghcr.io/ivanpetrushev/my-watch-tower-backend:latest
     build:
       context: ./backend
     environment:
@@ -50,7 +50,7 @@ services:
         condition: service_started
     restart: always
   backend-migrate:
-    image: my-watch-tower-backend:latest
+    image: ghcr.io/ivanpetrushev/my-watch-tower-backend:latest
     build:
       context: ./backend
     command: [ "sh", "-c", 'npx prisma migrate deploy' ]
@@ -59,7 +59,7 @@ services:
       postgres:
         condition: service_healthy
   frontend:
-    image: my-watch-tower-frontend:latest
+    image: ghcr.io/ivanpetrushev/my-watch-tower-frontend:latest
     build:
       context: ./frontend
     # env_file: "./frontend/.env"
