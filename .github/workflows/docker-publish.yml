@@ -7,8 +7,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  BACKEND_IMAGE: ghcr.io/ivan.petrushev/my-watch-tower-backend
-  FRONTEND_IMAGE: ghcr.io/ivan.petrushev/my-watch-tower-frontend
+  BACKEND_IMAGE: ghcr.io/ivanpetrushev/my-watch-tower-backend
+  FRONTEND_IMAGE: ghcr.io/ivanpetrushev/my-watch-tower-frontend
 
 jobs:
   build-and-push:
