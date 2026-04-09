@@ -196,7 +196,8 @@ Docker Compose is used for easy deployment. Refer to [Quick Start (development)]
 
 1. **Start the containers**
 
-   Run `docker compose up -d` to run all the services - backend, frontend, Redis, PostgreSQL, pgAdmin (optional), nginx.
+   Run `docker compose up -d` to run all the services - backend, frontend, Redis, PostgreSQL, pgAdmin (optional), nginx. First startup may take a while as it downloads all needed SatNOGS resources.
+   Docker images are set to `latest` tag, but if you want to run stable versions, you can check specific [tag](https://github.com/ivanpetrushev/my-watch-tower/tags) from GitHub.
    Migrations will be applied automatically via the `backend-migrate` service.
 
    If you prefer to run the migrations manually, you can run the rest of the services separately.
@@ -209,9 +210,10 @@ Docker Compose is used for easy deployment. Refer to [Quick Start (development)]
 
 2. **Access the application**
 
-   - Frontend: http://localhost
-   - API Docs: http://localhost/api/swagger
-   - pgAdmin: http://localhost:8080 (admin@example.com / admin123)
+   - Frontend: [http://localhost](http://localhost)
+   - API Docs: [http://localhost/api/swagger](http://localhost/api/swagger)
+   - pgAdmin: [http://localhost:8080](http://localhost:8080) (credentials admin@example.com / admin123)
+
 ---
 
 ## Calendar Integration
@@ -294,7 +296,7 @@ B) **Dynamic Subscription (Recommended)**
 
 - [x] **Timeline view**: Visualize upcoming passes in a timeline format
 - [x] **Current sky**: Real-time sky chart with all visible satellites
-- [ ] **Production Docker Images**: Create optimized Docker images for backend and frontend
+- [x] **Production Docker Images**: Create optimized Docker images for backend and frontend
 - [x] **Complete Docker Compose**: Production-ready compose file with all services
 - [x] **Calendar Integration**: Sync high-value passes to Google Calendar/iCal
 
