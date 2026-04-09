@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - '*'
+    branches:
+      - master
 
 env:
   REGISTRY: ghcr.io
@@ -33,6 +35,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Build/push "latest" image tag on merge to master OR "<tag name>" on specific tag push 
+      - name: Resolve image tag
+        id: tag
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "value=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "value=latest" >> $GITHUB_OUTPUT
+          fi
+
       # Build and Push Backend
       - name: Build and push Backend
         uses: docker/build-push-action@v5
@@ -40,7 +52,7 @@ jobs:
           context: ./backend 
           file: ./backend/Dockerfile
           push: true
-          tags: ${{ env.BACKEND_IMAGE }}:${{ github.ref_name }}
+          tags: ${{ env.BACKEND_IMAGE }}:${{ steps.tag.outputs.value }}
 
       # Build and Push Frontend
       - name: Build and push Frontend
@@ -49,4 +61,4 @@ jobs:
           context: ./frontend 
           file: ./frontend/Dockerfile
           push: true
-          tags: ${{ env.FRONTEND_IMAGE }}:${{ github.ref_name }}
+          tags: ${{ env.FRONTEND_IMAGE }}:${{ steps.tag.outputs.value }}
